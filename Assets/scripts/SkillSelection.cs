@@ -33,12 +33,10 @@ public class SkillSelection : MonoBehaviour
 
         if (characterClass == "Barbar")
         {
-            Debug.Log("Barbar selected. Enabling Barbar skills.");
             EnableBarbarSkills(true);
         }
         else
         {
-            Debug.Log("Non-Barbar class selected. Disabling all skills.");
             EnableBarbarSkills(false);
         }
     }
@@ -72,7 +70,6 @@ public class SkillSelection : MonoBehaviour
             {
                 changedToggle.isOn = false;
                 selectedSkillsCount--;
-                Debug.Log("Skill limit exceeded. Deselecting " + changedToggle.name);
             }
         }
         else
