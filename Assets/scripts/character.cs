@@ -87,6 +87,9 @@ public class character : MonoBehaviour
     public TextMeshProUGUI stealth;
     public TextMeshProUGUI survival;
 
+    private Player player;
+
+
     private string[] characterClasses = new string[]
     {
         "Barbar", "Bard", "Bojovník", "Èarodìj", "Èernoknìžník", "Druid", "Hranièáø", "Klerik", "Kouzelník", "Mnich", "Paladin", "Tulák"
@@ -136,6 +139,8 @@ public class character : MonoBehaviour
         ResetAssignedStats();
 
         UpdateHP();
+
+        player = FindObjectOfType<Player>();
     }
 
     private void RollStats()
@@ -154,9 +159,14 @@ public class character : MonoBehaviour
             int statValue = rolls[1] + rolls[2] + rolls[3];
 
             stats[i] = statValue;
-            availableStats.Add(i);
+            availableStats.Add(stats[i]);
         }
-        valuesForStatsText.text = $"{stats[0]} {stats[1]} {stats[2]} {stats[3]} {stats[4]} {stats[5]}";
+        //System.Array.Sort(stats);
+        //System.Array.Reverse(stats);
+        availableStats.Sort();
+        availableStats.Reverse();
+        //valuesForStatsText.text = $"{stats[0]} {stats[1]} {stats[2]} {stats[3]} {stats[4]} {stats[5]}";
+        DisplayAvailableStats();
 
         int bonusStrength = Mathf.FloorToInt((stats[0] / 2)) - 5;
 
@@ -180,19 +190,32 @@ public class character : MonoBehaviour
 
     private void CycleStat(ref TextMeshProUGUI statText, int statIndex, int direction)
     {
+        Debug.Log(statIndex);
         if (assignedStats[statIndex] != -1)
         {
             availableStats.Add(assignedStats[statIndex]);
+            availableStats.Sort();
+            availableStats.Reverse();
+            DisplayAvailableStats();
         }
 
         int currentIndex = assignedStats[statIndex] == -1 ? 0 : availableStats.IndexOf(assignedStats[statIndex]);
+        Debug.Log(currentIndex);
+
 
         currentIndex = (currentIndex + direction + availableStats.Count) % availableStats.Count;
 
+        Debug.Log(currentIndex);
+
         assignedStats[statIndex] = availableStats[currentIndex];
         availableStats.RemoveAt(currentIndex);
+        DisplayAvailableStats();
 
-        int baseValue = stats[assignedStats[statIndex]];
+
+
+        //int baseValue = stats[assignedStats[statIndex]];
+        int baseValue = assignedStats[statIndex];
+
 
         if (race == "èlovìk")
         {
@@ -233,27 +256,27 @@ public class character : MonoBehaviour
         {
             case 0:
                 bonusStrengthText.text = bonusValue.ToString();
-                showBonusStrengthText.text = bonusStrengthText.text;
+                player.bonusStrength = bonusValue;
                 break;
             case 1:
                 bonusIntelligenceText.text = bonusValue.ToString();
-                showBonusIntelligenceText.text = bonusIntelligenceText.text;
+                player.bonusIntelligence = bonusValue;
                 break;
             case 2:
                 bonusDexterityText.text = bonusValue.ToString();
-                showBonusDexterityText.text = bonusDexterityText.text;
+                player.bonusDexterity = bonusValue;
                 break;
             case 3:
                 bonusWisdomText.text = bonusValue.ToString();
-                showWisdomText.text = bonusDexterityText.text;
+                player.bonusWisdom = bonusValue;
                 break;
             case 4:
                 bonusConstitutionText.text = bonusValue.ToString();
-                showBonusConstitutionText.text = constitutionText.text;
+                player.bonusConstitution = bonusValue;
                 break;
             case 5:
                 bonusCharismaText.text = bonusValue.ToString();
-                showCharismaText.text = bonusCharismaText.text;
+                player.bonusCharisma = bonusValue;
                 break;
         }
     }
@@ -288,6 +311,12 @@ public class character : MonoBehaviour
         characterClass = characterClassText.text;
         race = raceText.text;
         hp = int.Parse(hpText.text);
+
+        player.EnterValuesClass(characterClass, race, hp);
+
+        Debug.Log(player.characterClass);
+        Debug.Log(player.race);
+        Debug.Log(player.hp);
     }
 
     public void EnterValuesStats()
@@ -298,35 +327,59 @@ public class character : MonoBehaviour
         intelligence = int.Parse(intelligenceText.text);
         wisdom = int.Parse(wisdomText.text);
         charisma = int.Parse(charismaText.text);
+
+        player.EnterValuesStats(strength, dexterity, constitution, intelligence, wisdom, charisma);
+
+        Debug.Log(player.strength);
+        Debug.Log(player.bonusStrength);
     }
 
     public void showStats()
     {
-    showHpText.text = hp.ToString();
-    showStrengthText.text = strength.ToString();
-    showIntelligenceText.text = intelligence.ToString();
-    showDexterityText.text = dexterity.ToString();
-    showWisdomText.text = wisdom.ToString();
-    showConstitutionText.text = constitution.ToString();
-    showCharismaText.text = charisma.ToString();
+    showHpText.text = player.hp.ToString();
+    showStrengthText.text = player.strength.ToString();
+    showIntelligenceText.text = player.intelligence.ToString();
+    showDexterityText.text = player.dexterity.ToString();
+    showWisdomText.text = player.wisdom.ToString();
+    showConstitutionText.text = player.constitution.ToString();
+    showCharismaText.text = player.charisma.ToString();
 
-    acrobatics.text = bonusDexterityText.text;
-    animalHandling.text = bonusWisdomText.text;
-    arcana.text = bonusIntelligenceText.text;
-    athletics.text = bonusStrengthText.text;
-    deception.text = bonusCharismaText.text;
-    history.text = bonusIntelligenceText.text;
-    insight.text = bonusWisdomText.text;
-    intimidation.text = bonusCharismaText.text;
-    investigation.text = bonusIntelligenceText.text;
-    medicine.text = bonusWisdomText.text;
-    nature.text = bonusIntelligenceText.text;
-    perception.text = bonusWisdomText.text;
-    performance.text = showBonusCharismaText.text;
-    persuasion.text = bonusCharismaText.text;
-    religion.text = bonusIntelligenceText.text;
-    sleightOfHand.text = bonusDexterityText.text;
-    stealth.text = bonusDexterityText.text;    
-    survival.text = bonusWisdomText.text;
+    showBonusStrengthText.text = player.bonusStrength.ToString();
+    showBonusIntelligenceText.text = player.bonusIntelligence.ToString();
+    showBonusDexterityText.text = player.dexterity.ToString();
+    showBonusWisdomText.text = player.wisdom.ToString();
+    showBonusConstitutionText.text = player.constitution.ToString();
+    showBonusCharismaText.text = player.charisma.ToString();
+
+    acrobatics.text = player.bonusDexterity.ToString();
+    animalHandling.text = player.bonusWisdom.ToString();
+    arcana.text = player.bonusIntelligence.ToString();
+    athletics.text = player.bonusStrength.ToString();
+    deception.text = player.bonusCharisma.ToString();
+    history.text = player.bonusIntelligence.ToString();
+    insight.text = player.bonusWisdom.ToString();
+    intimidation.text = player.bonusCharisma.ToString();
+    investigation.text = player.bonusIntelligence.ToString();
+    medicine.text = player.bonusWisdom.ToString();
+    nature.text = player.bonusIntelligence.ToString();
+    perception.text = player.bonusWisdom.ToString();
+    performance.text = player.bonusCharisma.ToString();
+    persuasion.text = player.bonusCharisma.ToString();
+    religion.text = player.bonusIntelligence.ToString();
+    sleightOfHand.text = player.bonusDexterity.ToString();
+    stealth.text = player.bonusDexterity.ToString();    
+    survival.text = player.bonusWisdom.ToString();
     }
+
+    private void DisplayAvailableStats()
+    {
+        string text = "";
+        for (int i = 0; i < availableStats.Count; i++)
+        {
+            text = text + availableStats[i] + " "; 
+        }
+
+        valuesForStatsText.text = text;
+    }
+
 }

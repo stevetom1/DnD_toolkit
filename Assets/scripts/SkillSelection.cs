@@ -51,7 +51,7 @@ public class SkillSelection : MonoBehaviour
             {
                 toggle.interactable = isEnabled;
                 toggle.isOn = false;
-                Debug.Log("Setting " + toggle.name + " interactable: " + isEnabled);
+                //Debug.Log("Setting " + toggle.name + " interactable: " + isEnabled);
             }
             else
             {
