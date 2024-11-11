@@ -45,6 +45,9 @@ public class character : MonoBehaviour
     public Button raceLeftArrow;
     public Button raceRightArrow;
 
+    public Button resetButton;
+    public Button nextButton;
+
     private int[] stats = new int[6];
     private int[] bonusStats = new int[6];
     private List<int> availableStats;
@@ -141,6 +144,8 @@ public class character : MonoBehaviour
         UpdateHP();
 
         player = FindObjectOfType<Player>();
+        resetButton.onClick.AddListener(ResetStats);
+        UpdateNextButtonInteractable();
     }
 
     private void RollStats()
@@ -382,4 +387,53 @@ public class character : MonoBehaviour
         valuesForStatsText.text = text;
     }
 
+    public void ResetStats()
+    {
+        for (int i = 0; i < assignedStats.Length; i++)
+        {
+            if (assignedStats[i] != -1)
+            {
+                availableStats.Add(assignedStats[i]);
+                assignedStats[i] = -1;
+            }
+        }
+
+        availableStats.Sort();
+        availableStats.Reverse();
+        DisplayAvailableStats();
+
+        strengthText.text = "0";
+        intelligenceText.text = "0";
+        dexterityText.text = "0";
+        wisdomText.text = "0";
+        constitutionText.text = "0";
+        charismaText.text = "0";
+
+        bonusStrengthText.text = "0";
+        bonusIntelligenceText.text = "0";
+        bonusDexterityText.text = "0";
+        bonusWisdomText.text = "0";
+        bonusConstitutionText.text = "0";
+        bonusCharismaText.text = "0";
+    }
+
+    private void UpdateNextButtonInteractable()
+    {
+        bool allStatsAssigned = true;
+        for (int i = 0; i < assignedStats.Length; i++)
+        {
+            if (assignedStats[i] == -1)
+            {
+                allStatsAssigned = false;
+                break;
+            }
+        }
+
+        nextButton.interactable = allStatsAssigned;
+    }
+
+    private void Update()
+    {
+        UpdateNextButtonInteractable();
+    }
 }

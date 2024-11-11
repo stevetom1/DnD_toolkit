@@ -353,10 +353,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 476093932}
-        m_TargetAssemblyTypeName: character, Assembly-CSharp
-        m_MethodName: rollStats
-        m_Mode: 1
+      - m_Target: {fileID: 19087569}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -5649,6 +5649,7 @@ GameObject:
   - component: {fileID: 476093933}
   - component: {fileID: 476093932}
   - component: {fileID: 476093934}
+  - component: {fileID: 476093935}
   m_Layer: 0
   m_Name: Character
   m_TagString: Untagged
@@ -5701,6 +5702,8 @@ MonoBehaviour:
   raceText: {fileID: 2102414461}
   raceLeftArrow: {fileID: 1519179096}
   raceRightArrow: {fileID: 842731133}
+  resetButton: {fileID: 66203247}
+  nextButton: {fileID: 1489573509}
   showHpText: {fileID: 740400980}
   showStrengthText: {fileID: 1311944861}
   showIntelligenceText: {fileID: 431781500}
@@ -5788,6 +5791,33 @@ MonoBehaviour:
   - {fileID: 729049362}
   - {fileID: 109703575}
   maxSkillSelection: 2
+--- !u!114 &476093935
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 476093931}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 60ed3392a929d7b45ae6d7fca188406a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  characterClass: 
+  race: 
+  hp: 0
+  strength: 0
+  dexterity: 0
+  constitution: 0
+  intelligence: 0
+  wisdom: 0
+  charisma: 0
+  bonusStrength: 0
+  bonusDexterity: 0
+  bonusConstitution: 0
+  bonusIntelligence: 0
+  bonusWisdom: 0
+  bonusCharisma: 0
 --- !u!1 &479436125
 GameObject:
   m_ObjectHideFlags: 0
@@ -11685,7 +11715,7 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 476093932}
         m_TargetAssemblyTypeName: character, Assembly-CSharp
-        m_MethodName: EnterValues
+        m_MethodName: EnterValuesClass
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -12199,7 +12229,7 @@ CanvasRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 919224592}
-  m_CullTransparentMesh: 1
+  m_CullTransparentMesh: 0
 --- !u!1 &929911902
 GameObject:
   m_ObjectHideFlags: 0
@@ -14267,7 +14297,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1129883368
 Transform:
   m_ObjectHideFlags: 0
@@ -20606,7 +20636,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1561033522
 Transform:
   m_ObjectHideFlags: 0
