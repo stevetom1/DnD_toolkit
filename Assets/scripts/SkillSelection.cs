@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
 using TMPro;
+using System.Collections;
 
 public class SkillSelection : MonoBehaviour
 {
@@ -9,11 +10,24 @@ public class SkillSelection : MonoBehaviour
     public string characterClass;
 
     public List<Toggle> allSkills;
-    public List<Toggle> barbarSkills;
+    public List<Toggle> SkillsBarbar;
+    public List<Toggle> SkillsBard;
+    public List<Toggle> SkillsBojovnik;
+    public List<Toggle> SkillsCarodej;
+    public List<Toggle> SkillsCernokneznik;
+    public List<Toggle> SkillsDruid;
+    public List<Toggle> SkillsHranicar;
+    public List<Toggle> SkillsKlerik;
+    public List<Toggle> SkillsKouzelnik;
+    public List<Toggle> SkillsMnich;
+    public List<Toggle> SkillsPaladin;
+    public List<Toggle> SkillsTulak;
 
-    public int maxSkillSelection = 2;
+    public int maxSkillSelection;
 
     private int selectedSkillsCount = 0;
+
+    public TextMeshProUGUI SkillsLeftText;
 
     void Start()
     {
@@ -26,18 +40,73 @@ public class SkillSelection : MonoBehaviour
 
         OnClassSelectionChanged();
     }
+    private void Update()
+    {
+        //OnClassSelectionChanged();
+    }
 
     public void OnClassSelectionChanged()
     {
         characterClass = characterClassText.text;
 
-        if (characterClass == "Barbar")
+        /*if (characterClass == "Barbar")
         {
+            maxSkillSelection = 2;
             EnableBarbarSkills(true);
         }
-        else
+        else if()
         {
             EnableBarbarSkills(false);
+        }*/
+
+        switch (characterClass)
+        {
+            case "Barbar": chooseSkills(SkillsBarbar, 2);
+                break;
+
+            case "Bard":
+                chooseSkills(SkillsBard, 3);
+                break;
+
+            case "Bojovník":
+                chooseSkills(SkillsBojovnik, 2);
+                break;
+
+            case "Èarodìj":
+                chooseSkills(SkillsCarodej, 2);
+                break;
+
+            case "Èernoknìžník":
+                chooseSkills(SkillsCernokneznik, 2);
+                break;
+
+            case "Druid":
+                chooseSkills(SkillsDruid, 2);
+                break;
+
+            case "Hranicar":
+                chooseSkills(SkillsHranicar, 3);
+                break;
+
+            case "Klerik":
+                chooseSkills(SkillsKlerik, 2);
+                break;
+
+            case "Kouzelník":
+                chooseSkills(SkillsKouzelnik, 2);
+                break;
+
+            case "Mnich":
+                chooseSkills(SkillsMnich, 2);
+                break;
+
+            case "paladin":
+                chooseSkills(SkillsPaladin, 2);
+                break;
+
+            case "Tulák":
+                chooseSkills(SkillsTulak, 4);
+                break;
         }
     }
 
@@ -47,7 +116,7 @@ public class SkillSelection : MonoBehaviour
 
         foreach (Toggle toggle in allSkills)
         {
-            if (barbarSkills.Contains(toggle))
+            if (SkillsBarbar.Contains(toggle))
             {
                 toggle.interactable = isEnabled;
                 toggle.isOn = false;
@@ -76,5 +145,11 @@ public class SkillSelection : MonoBehaviour
         {
             selectedSkillsCount--;
         }
+    }
+
+    private List<string> chooseSkills(List<Toggle> toggles, int skillsLeft)
+    {
+        List<string> result = new List<string>();
+        return result;
     }
 }

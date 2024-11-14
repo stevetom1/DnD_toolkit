@@ -166,11 +166,9 @@ public class character : MonoBehaviour
             stats[i] = statValue;
             availableStats.Add(stats[i]);
         }
-        //System.Array.Sort(stats);
-        //System.Array.Reverse(stats);
+
         availableStats.Sort();
         availableStats.Reverse();
-        //valuesForStatsText.text = $"{stats[0]} {stats[1]} {stats[2]} {stats[3]} {stats[4]} {stats[5]}";
         DisplayAvailableStats();
 
         int bonusStrength = Mathf.FloorToInt((stats[0] / 2)) - 5;
@@ -195,30 +193,30 @@ public class character : MonoBehaviour
 
     private void CycleStat(ref TextMeshProUGUI statText, int statIndex, int direction)
     {
-        Debug.Log(statIndex);
-        if (assignedStats[statIndex] != -1)
+        if(direction == 1)
         {
-            availableStats.Add(assignedStats[statIndex]);
-            availableStats.Sort();
-            availableStats.Reverse();
-            DisplayAvailableStats();
+            if(assignedStats[statIndex] != -1)
+            {
+                availableStats.Add(assignedStats[statIndex]);
+            }
+            assignedStats[statIndex] = availableStats[0];
+            availableStats.RemoveAt(0);
         }
 
-        int currentIndex = assignedStats[statIndex] == -1 ? 0 : availableStats.IndexOf(assignedStats[statIndex]);
-        Debug.Log(currentIndex);
+        if(direction == -1)
+        {
+            if (assignedStats[statIndex] != -1)
+            {
+                availableStats.Insert(0, assignedStats[statIndex]);
+            }
+            assignedStats[statIndex] = availableStats[availableStats.Count -1];
+            availableStats.RemoveAt(availableStats.Count -1);
+        }
 
-
-        currentIndex = (currentIndex + direction + availableStats.Count) % availableStats.Count;
-
-        Debug.Log(currentIndex);
-
-        assignedStats[statIndex] = availableStats[currentIndex];
-        availableStats.RemoveAt(currentIndex);
         DisplayAvailableStats();
 
 
 
-        //int baseValue = stats[assignedStats[statIndex]];
         int baseValue = assignedStats[statIndex];
 
 
@@ -318,10 +316,6 @@ public class character : MonoBehaviour
         hp = int.Parse(hpText.text);
 
         player.EnterValuesClass(characterClass, race, hp);
-
-        Debug.Log(player.characterClass);
-        Debug.Log(player.race);
-        Debug.Log(player.hp);
     }
 
     public void EnterValuesStats()
@@ -334,9 +328,6 @@ public class character : MonoBehaviour
         charisma = int.Parse(charismaText.text);
 
         player.EnterValuesStats(strength, dexterity, constitution, intelligence, wisdom, charisma);
-
-        Debug.Log(player.strength);
-        Debug.Log(player.bonusStrength);
     }
 
     public void showStats()
