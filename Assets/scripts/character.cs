@@ -56,6 +56,10 @@ public class character : MonoBehaviour
     private int hp, strength, dexterity, constitution, intelligence, wisdom, charisma;
     private string characterClass, race;
 
+    public TextMeshProUGUI showName;
+    public TextMeshProUGUI showClass;
+    public TextMeshProUGUI showRace;
+
     public TextMeshProUGUI showHpText;
     public TextMeshProUGUI showStrengthText;
     public TextMeshProUGUI showIntelligenceText;
@@ -193,9 +197,9 @@ public class character : MonoBehaviour
 
     private void CycleStat(ref TextMeshProUGUI statText, int statIndex, int direction)
     {
-        if(direction == 1)
+        if (direction == 1)
         {
-            if(assignedStats[statIndex] != -1)
+            if (assignedStats[statIndex] != -1)
             {
                 availableStats.Add(assignedStats[statIndex]);
             }
@@ -203,14 +207,14 @@ public class character : MonoBehaviour
             availableStats.RemoveAt(0);
         }
 
-        if(direction == -1)
+        if (direction == -1)
         {
             if (assignedStats[statIndex] != -1)
             {
                 availableStats.Insert(0, assignedStats[statIndex]);
             }
-            assignedStats[statIndex] = availableStats[availableStats.Count -1];
-            availableStats.RemoveAt(availableStats.Count -1);
+            assignedStats[statIndex] = availableStats[availableStats.Count - 1];
+            availableStats.RemoveAt(availableStats.Count - 1);
         }
 
         DisplayAvailableStats();
@@ -330,41 +334,45 @@ public class character : MonoBehaviour
         player.EnterValuesStats(strength, dexterity, constitution, intelligence, wisdom, charisma);
     }
 
-    public void showStats()
+    public void ShowStats()
     {
-    showHpText.text = player.hp.ToString();
-    showStrengthText.text = player.strength.ToString();
-    showIntelligenceText.text = player.intelligence.ToString();
-    showDexterityText.text = player.dexterity.ToString();
-    showWisdomText.text = player.wisdom.ToString();
-    showConstitutionText.text = player.constitution.ToString();
-    showCharismaText.text = player.charisma.ToString();
+        //showName.text = 
+        showClass.text = player.characterClass;
+        showRace.text = player.race;
 
-    showBonusStrengthText.text = player.bonusStrength.ToString();
-    showBonusIntelligenceText.text = player.bonusIntelligence.ToString();
-    showBonusDexterityText.text = player.dexterity.ToString();
-    showBonusWisdomText.text = player.wisdom.ToString();
-    showBonusConstitutionText.text = player.constitution.ToString();
-    showBonusCharismaText.text = player.charisma.ToString();
+        showHpText.text = player.hp.ToString();
+        showStrengthText.text = player.strength.ToString();
+        showIntelligenceText.text = player.intelligence.ToString();
+        showDexterityText.text = player.dexterity.ToString();
+        showWisdomText.text = player.wisdom.ToString();
+        showConstitutionText.text = player.constitution.ToString();
+        showCharismaText.text = player.charisma.ToString();
 
-    acrobatics.text = player.bonusDexterity.ToString();
-    animalHandling.text = player.bonusWisdom.ToString();
-    arcana.text = player.bonusIntelligence.ToString();
-    athletics.text = player.bonusStrength.ToString();
-    deception.text = player.bonusCharisma.ToString();
-    history.text = player.bonusIntelligence.ToString();
-    insight.text = player.bonusWisdom.ToString();
-    intimidation.text = player.bonusCharisma.ToString();
-    investigation.text = player.bonusIntelligence.ToString();
-    medicine.text = player.bonusWisdom.ToString();
-    nature.text = player.bonusIntelligence.ToString();
-    perception.text = player.bonusWisdom.ToString();
-    performance.text = player.bonusCharisma.ToString();
-    persuasion.text = player.bonusCharisma.ToString();
-    religion.text = player.bonusIntelligence.ToString();
-    sleightOfHand.text = player.bonusDexterity.ToString();
-    stealth.text = player.bonusDexterity.ToString();    
-    survival.text = player.bonusWisdom.ToString();
+        showBonusStrengthText.text = player.bonusStrength.ToString();
+        showBonusIntelligenceText.text = player.bonusIntelligence.ToString();
+        showBonusDexterityText.text = player.dexterity.ToString();
+        showBonusWisdomText.text = player.wisdom.ToString();
+        showBonusConstitutionText.text = player.constitution.ToString();
+        showBonusCharismaText.text = player.charisma.ToString();
+
+        acrobatics.text = player.bonusDexterity.ToString();
+        animalHandling.text = player.bonusWisdom.ToString();
+        arcana.text = player.bonusIntelligence.ToString();
+        athletics.text = player.bonusStrength.ToString();
+        deception.text = player.bonusCharisma.ToString();
+        history.text = player.bonusIntelligence.ToString();
+        insight.text = player.bonusWisdom.ToString();
+        intimidation.text = player.bonusCharisma.ToString();
+        investigation.text = player.bonusIntelligence.ToString();
+        medicine.text = player.bonusWisdom.ToString();
+        nature.text = player.bonusIntelligence.ToString();
+        perception.text = player.bonusWisdom.ToString();
+        performance.text = player.bonusCharisma.ToString();
+        persuasion.text = player.bonusCharisma.ToString();
+        religion.text = player.bonusIntelligence.ToString();
+        sleightOfHand.text = player.bonusDexterity.ToString();
+        stealth.text = player.bonusDexterity.ToString();
+        survival.text = player.bonusWisdom.ToString();
     }
 
     private void DisplayAvailableStats()
@@ -372,7 +380,7 @@ public class character : MonoBehaviour
         string text = "";
         for (int i = 0; i < availableStats.Count; i++)
         {
-            text = text + availableStats[i] + " "; 
+            text = text + availableStats[i] + " ";
         }
 
         valuesForStatsText.text = text;
@@ -426,5 +434,6 @@ public class character : MonoBehaviour
     private void Update()
     {
         UpdateNextButtonInteractable();
+        ShowStats();
     }
 }

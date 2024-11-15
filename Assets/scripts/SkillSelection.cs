@@ -24,10 +24,11 @@ public class SkillSelection : MonoBehaviour
     public List<Toggle> SkillsTulak;
 
     public int maxSkillSelection;
+    public int skillCount;
 
-    private int selectedSkillsCount = 0;
+    public TextMeshProUGUI skillsLeftText;
 
-    public TextMeshProUGUI SkillsLeftText;
+    public Button nextButtonInteractable;
 
     void Start()
     {
@@ -37,27 +38,15 @@ public class SkillSelection : MonoBehaviour
             toggle.isOn = false;
             toggle.onValueChanged.AddListener(delegate { OnSkillToggleChanged(toggle); });
         }
-
-        OnClassSelectionChanged();
     }
     private void Update()
     {
-        //OnClassSelectionChanged();
+        UpdateNextButtonInteractable();
     }
 
     public void OnClassSelectionChanged()
     {
         characterClass = characterClassText.text;
-
-        /*if (characterClass == "Barbar")
-        {
-            maxSkillSelection = 2;
-            EnableBarbarSkills(true);
-        }
-        else if()
-        {
-            EnableBarbarSkills(false);
-        }*/
 
         switch (characterClass)
         {
@@ -110,17 +99,31 @@ public class SkillSelection : MonoBehaviour
         }
     }
 
-    void EnableBarbarSkills(bool isEnabled)
+    void OnSkillToggleChanged(Toggle changedToggle)
     {
-        selectedSkillsCount = 0;
+        if (!changedToggle.isOn)
+        {
+            skillCount++;
+        }
+        else
+        {
+            skillCount--;
+            if (skillCount < 0)
+            {
+                changedToggle.isOn = false;
+            }
+        }
+        skillsLeftText.text = skillCount.ToString();
+    }
 
+    private void chooseSkills(List<Toggle> toggles, int skillsLeft)
+    {
         foreach (Toggle toggle in allSkills)
         {
-            if (SkillsBarbar.Contains(toggle))
+            if (toggles.Contains(toggle))
             {
-                toggle.interactable = isEnabled;
+                toggle.interactable = true;
                 toggle.isOn = false;
-                //Debug.Log("Setting " + toggle.name + " interactable: " + isEnabled);
             }
             else
             {
@@ -128,28 +131,25 @@ public class SkillSelection : MonoBehaviour
                 toggle.isOn = false;
             }
         }
+
+        skillsLeftText.text = skillsLeft.ToString();
+        skillCount = skillsLeft;
     }
 
-    void OnSkillToggleChanged(Toggle changedToggle)
+    public void Button()
     {
-        if (changedToggle.isOn)
+        OnClassSelectionChanged();
+    }
+
+    private void UpdateNextButtonInteractable()
+    {
+        if(skillCount == 0)
         {
-            selectedSkillsCount++;
-            if (selectedSkillsCount > maxSkillSelection)
-            {
-                changedToggle.isOn = false;
-                selectedSkillsCount--;
-            }
+            nextButtonInteractable.interactable = true;
         }
         else
         {
-            selectedSkillsCount--;
+            nextButtonInteractable.interactable = false;
         }
-    }
-
-    private List<string> chooseSkills(List<Toggle> toggles, int skillsLeft)
-    {
-        List<string> result = new List<string>();
-        return result;
     }
 }
