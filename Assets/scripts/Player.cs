@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.IO;
 
 public class Player : MonoBehaviour
 {
@@ -21,6 +22,31 @@ public class Player : MonoBehaviour
     public int bonusIntelligence;
     public int bonusWisdom;
     public int bonusCharisma;
+
+    public void SaveToFile()
+    {
+        string json = JsonUtility.ToJson(this, true);
+        string path = Path.Combine(Application.persistentDataPath, "playerData.json");
+
+        File.WriteAllText(path, json);
+        Debug.Log("Player data saved to: " + path);
+    }
+
+    public void LoadFromFile()
+    {
+        string path = Path.Combine(Application.persistentDataPath, "playerData.json");
+
+        if (File.Exists(path))
+        {
+            string json = File.ReadAllText(path);
+            JsonUtility.FromJsonOverwrite(json, this);
+            Debug.Log("Player data loaded from: " + path);
+        }
+        else
+        {
+            Debug.LogError("Save file not found at: " + path);
+        }
+    }
 
     public void EnterValuesClass(string characterClass, string race, int hp)
     {
