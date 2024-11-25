@@ -5,9 +5,13 @@ using System.IO;
 
 public class Player : MonoBehaviour
 {
+    public string name;
     public string characterClass;
     public string race;
     public int hp;
+
+    public int level;
+    public int xp;
 
     public int strength;
     public int dexterity;
@@ -23,8 +27,47 @@ public class Player : MonoBehaviour
     public int bonusWisdom;
     public int bonusCharisma;
 
+    public int acrobaticst;
+    public int animalHandling;
+    public int arcana;
+    public int athletics;
+    public int deception;
+    public int history;
+    public int insight;
+    public int intimidation;
+    public int investigation;
+    public int intmedicine;
+    public int nature;
+    public int perception;
+    public int performance;
+    public int persuasion;
+    public int religion;
+    public int sleightOfHand;
+    public int stealth;
+    public int survival;
+
     public void SaveToFile()
     {
+        acrobaticst = bonusDexterity;
+        animalHandling = bonusWisdom;
+        arcana = bonusIntelligence;
+        athletics = bonusStrength;
+        deception = bonusCharisma;
+        history = bonusIntelligence;
+        insight = bonusWisdom;
+        intimidation = bonusCharisma;
+        investigation = bonusIntelligence;
+        intmedicine = bonusWisdom;
+        nature = bonusIntelligence;
+        perception = bonusWisdom;
+        performance = bonusCharisma;
+        persuasion = bonusCharisma;
+        religion = bonusIntelligence;
+        sleightOfHand = bonusDexterity;
+        stealth = bonusDexterity;
+        survival = bonusWisdom;
+
+
         string json = JsonUtility.ToJson(this, true);
         string path = Path.Combine(Application.persistentDataPath, "playerData.json");
 
