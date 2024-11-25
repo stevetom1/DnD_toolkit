@@ -57,6 +57,9 @@ public class character : MonoBehaviour
     private string characterClass, race;
 
     public TextMeshProUGUI showName;
+    public TMP_InputField nameInput;
+
+
     public TextMeshProUGUI showClass;
     public TextMeshProUGUI showRace;
 
@@ -315,11 +318,13 @@ public class character : MonoBehaviour
 
     public void EnterValuesClass()
     {
+        name = nameInput.text;
         characterClass = characterClassText.text;
         race = raceText.text;
         hp = int.Parse(hpText.text);
 
-        player.EnterValuesClass(characterClass, race, hp);
+
+        player.EnterValuesClass(name, characterClass, race, hp);
     }
 
     public void EnterValuesStats()
@@ -336,7 +341,7 @@ public class character : MonoBehaviour
 
     public void ShowStats()
     {
-        //showName.text = 
+        showName.text = player.name; 
         showClass.text = player.characterClass;
         showRace.text = player.race;
 
@@ -350,29 +355,29 @@ public class character : MonoBehaviour
 
         showBonusStrengthText.text = player.bonusStrength.ToString();
         showBonusIntelligenceText.text = player.bonusIntelligence.ToString();
-        showBonusDexterityText.text = player.dexterity.ToString();
-        showBonusWisdomText.text = player.wisdom.ToString();
-        showBonusConstitutionText.text = player.constitution.ToString();
-        showBonusCharismaText.text = player.charisma.ToString();
+        showBonusDexterityText.text = player.bonusDexterity.ToString();
+        showBonusWisdomText.text = player.bonusWisdom.ToString();
+        showBonusConstitutionText.text = player.bonusConstitution.ToString();
+        showBonusCharismaText.text = player.bonusCharisma.ToString();
 
-        acrobatics.text = player.bonusDexterity.ToString();
-        animalHandling.text = player.bonusWisdom.ToString();
-        arcana.text = player.bonusIntelligence.ToString();
-        athletics.text = player.bonusStrength.ToString();
-        deception.text = player.bonusCharisma.ToString();
-        history.text = player.bonusIntelligence.ToString();
-        insight.text = player.bonusWisdom.ToString();
-        intimidation.text = player.bonusCharisma.ToString();
-        investigation.text = player.bonusIntelligence.ToString();
-        medicine.text = player.bonusWisdom.ToString();
-        nature.text = player.bonusIntelligence.ToString();
-        perception.text = player.bonusWisdom.ToString();
-        performance.text = player.bonusCharisma.ToString();
-        persuasion.text = player.bonusCharisma.ToString();
-        religion.text = player.bonusIntelligence.ToString();
-        sleightOfHand.text = player.bonusDexterity.ToString();
-        stealth.text = player.bonusDexterity.ToString();
-        survival.text = player.bonusWisdom.ToString();
+        acrobatics.text = player.acrobatics.ToString();
+        animalHandling.text = player.animalHandling.ToString();
+        arcana.text = player.arcana.ToString();
+        athletics.text = player.athletics.ToString();
+        deception.text = player.deception.ToString();
+        history.text = player.history.ToString();
+        insight.text = player.insight.ToString();
+        intimidation.text = player.intimidation.ToString();
+        investigation.text = player.investigation.ToString();
+        medicine.text = player.medicine.ToString();
+        nature.text = player.nature.ToString();
+        perception.text = player.perception.ToString();
+        performance.text = player.performance.ToString();
+        persuasion.text = player.persuasion.ToString();
+        religion.text = player.religion.ToString();
+        sleightOfHand.text = player.sleightOfHand.ToString();
+        stealth.text = player.stealth.ToString();
+        survival.text = player.survival.ToString();
     }
 
     private void DisplayAvailableStats()

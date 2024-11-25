@@ -2,10 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
+using UnityEngine.UI;
+using TMPro;
 
 public class Player : MonoBehaviour
 {
     public string name;
+
     public string characterClass;
     public string race;
     public int hp;
@@ -27,7 +30,7 @@ public class Player : MonoBehaviour
     public int bonusWisdom;
     public int bonusCharisma;
 
-    public int acrobaticst;
+    public int acrobatics;
     public int animalHandling;
     public int arcana;
     public int athletics;
@@ -36,7 +39,7 @@ public class Player : MonoBehaviour
     public int insight;
     public int intimidation;
     public int investigation;
-    public int intmedicine;
+    public int medicine;
     public int nature;
     public int perception;
     public int performance;
@@ -46,28 +49,11 @@ public class Player : MonoBehaviour
     public int stealth;
     public int survival;
 
+    public int proficiencyBonus = 2;
+    public List<string> proficienciesSkillsList;
+
     public void SaveToFile()
     {
-        acrobaticst = bonusDexterity;
-        animalHandling = bonusWisdom;
-        arcana = bonusIntelligence;
-        athletics = bonusStrength;
-        deception = bonusCharisma;
-        history = bonusIntelligence;
-        insight = bonusWisdom;
-        intimidation = bonusCharisma;
-        investigation = bonusIntelligence;
-        intmedicine = bonusWisdom;
-        nature = bonusIntelligence;
-        perception = bonusWisdom;
-        performance = bonusCharisma;
-        persuasion = bonusCharisma;
-        religion = bonusIntelligence;
-        sleightOfHand = bonusDexterity;
-        stealth = bonusDexterity;
-        survival = bonusWisdom;
-
-
         string json = JsonUtility.ToJson(this, true);
         string path = Path.Combine(Application.persistentDataPath, "playerData.json");
 
@@ -91,8 +77,9 @@ public class Player : MonoBehaviour
         }
     }
 
-    public void EnterValuesClass(string characterClass, string race, int hp)
+    public void EnterValuesClass(string name,string characterClass, string race, int hp)
     {
+        this.name = name;
         this.characterClass = characterClass;
         this.race = race;
         this.hp = hp;
@@ -107,4 +94,27 @@ public class Player : MonoBehaviour
         this.wisdom = wisdom;
         this.charisma = charisma;
     }
+
+    public void SetSkills()
+    {
+        acrobatics = bonusDexterity + (proficienciesSkillsList.Contains("Acrobatics") ? proficiencyBonus : 0);
+        animalHandling = bonusWisdom + (proficienciesSkillsList.Contains("AnimalHandling") ? proficiencyBonus : 0);
+        arcana = bonusIntelligence + (proficienciesSkillsList.Contains("Arcana") ? proficiencyBonus : 0);
+        athletics = bonusStrength + (proficienciesSkillsList.Contains("Athletics") ? proficiencyBonus : 0);
+        deception = bonusCharisma + (proficienciesSkillsList.Contains("Deception") ? proficiencyBonus : 0);
+        history = bonusIntelligence + (proficienciesSkillsList.Contains("History") ? proficiencyBonus : 0);
+        insight = bonusWisdom + (proficienciesSkillsList.Contains("Insight") ? proficiencyBonus : 0);
+        intimidation = bonusCharisma + (proficienciesSkillsList.Contains("Intimidation") ? proficiencyBonus : 0);
+        investigation = bonusIntelligence + (proficienciesSkillsList.Contains("Investigation") ? proficiencyBonus : 0);
+        medicine = bonusWisdom + (proficienciesSkillsList.Contains("Medicine") ? proficiencyBonus : 0);
+        nature = bonusIntelligence + (proficienciesSkillsList.Contains("Nature") ? proficiencyBonus : 0);
+        perception = bonusWisdom + (proficienciesSkillsList.Contains("Perception") ? proficiencyBonus : 0);
+        performance = bonusCharisma + (proficienciesSkillsList.Contains("Performance") ? proficiencyBonus : 0);
+        persuasion = bonusCharisma + (proficienciesSkillsList.Contains("Persuation") ? proficiencyBonus : 0);
+        religion = bonusIntelligence + (proficienciesSkillsList.Contains("Religion") ? proficiencyBonus : 0);
+        sleightOfHand = bonusDexterity + (proficienciesSkillsList.Contains("SleightOfHand") ? proficiencyBonus : 0);
+        stealth = bonusDexterity + (proficienciesSkillsList.Contains("Stealth") ? proficiencyBonus : 0);
+        survival = bonusWisdom + (proficienciesSkillsList.Contains("Survival") ? proficiencyBonus : 0);
+    }
+    
 }

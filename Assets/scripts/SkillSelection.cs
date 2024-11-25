@@ -10,6 +10,7 @@ public class SkillSelection : MonoBehaviour
     public string characterClass;
 
     public List<Toggle> allSkills;
+
     public List<Toggle> SkillsBarbar;
     public List<Toggle> SkillsBard;
     public List<Toggle> SkillsBojovnik;
@@ -30,8 +31,13 @@ public class SkillSelection : MonoBehaviour
 
     public Button nextButtonInteractable;
 
+    private Player player;
+
+
     void Start()
     {
+        player = FindObjectOfType<Player>();
+
         foreach (Toggle toggle in allSkills)
         {
             toggle.interactable = false;
@@ -50,7 +56,8 @@ public class SkillSelection : MonoBehaviour
 
         switch (characterClass)
         {
-            case "Barbar": chooseSkills(SkillsBarbar, 2);
+            case "Barbar": 
+                chooseSkills(SkillsBarbar, 2);
                 break;
 
             case "Bard":
@@ -150,6 +157,17 @@ public class SkillSelection : MonoBehaviour
         else
         {
             nextButtonInteractable.interactable = false;
+        }
+    }
+
+    public void SelectedSkills()
+    {
+        foreach (var skill  in allSkills)
+        {
+            if (skill.isOn)
+            {
+                player.proficienciesSkillsList.Add(skill.name);
+            }
         }
     }
 }
