@@ -3,7 +3,7 @@ using UnityEngine;
 public class InventoryManager : MonoBehaviour
 {
     public SlotItem[] slotItems;
-
+    public EquipedSlot cloak, necklace, ring, armor, rightHand, leftHand, belt, boots;
     void Start()
     {
         
