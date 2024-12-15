@@ -52,6 +52,15 @@ public class Player : MonoBehaviour
     public int proficiencyBonus = 2;
     public List<string> proficienciesSkillsList;
 
+    public List<SOItems> inventory;
+    public InventoryManager inventoryManager;
+
+    private void Start()
+    {
+        inventoryManager = FindObjectOfType<InventoryManager>();
+        AddToInventory();
+    }
+
     public void SaveToFile()
     {
         string json = JsonUtility.ToJson(this, true);
@@ -117,4 +126,11 @@ public class Player : MonoBehaviour
         survival = bonusWisdom + (proficienciesSkillsList.Contains("Survival") ? proficiencyBonus : 0);
     }
     
+    private void AddToInventory()
+    {
+        foreach (var item in inventory)
+        {
+            inventoryManager.AddItem(item);
+        }
+    }
 }
