@@ -133,4 +133,9 @@ public class Player : MonoBehaviour
             inventoryManager.AddItem(item);
         }
     }
+
+    public void ExitApplication()
+    {
+        Application.Quit();
+    }
 }
