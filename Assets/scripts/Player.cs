@@ -55,34 +55,40 @@ public class Player : MonoBehaviour
     public List<SOItems> inventory;
     public InventoryManager inventoryManager;
 
-    private void Start()
-    {
-        inventoryManager = FindObjectOfType<InventoryManager>();
-        AddToInventory();
-    }
-
     public void SaveToFile()
     {
+        if (string.IsNullOrEmpty(name))
+        {
+            Debug.LogError("Player name is empty! Cannot save data.");
+            return;
+        }
+        string fileName = name.Replace(" ", "_") + ".json";
+        string path = Path.Combine(Application.persistentDataPath, fileName);
         string json = JsonUtility.ToJson(this, true);
-        string path = Path.Combine(Application.persistentDataPath, "playerData.json");
-
         File.WriteAllText(path, json);
-        Debug.Log("Player data saved to: " + path);
+        Debug.Log($"Player data saved to: {path}");
     }
 
-    public void LoadFromFile()
+    public void LoadFromFile(string playerName)
     {
-        string path = Path.Combine(Application.persistentDataPath, "playerData.json");
+        if (string.IsNullOrEmpty(playerName))
+        {
+            Debug.LogError("Player name is empty! Cannot load data.");
+            return;
+        }
+
+        string fileName = playerName.Replace(" ", "_") + ".json";
+        string path = Path.Combine(Application.persistentDataPath, fileName);
 
         if (File.Exists(path))
         {
             string json = File.ReadAllText(path);
             JsonUtility.FromJsonOverwrite(json, this);
-            Debug.Log("Player data loaded from: " + path);
+            Debug.Log($"Player data loaded from: {path}");
         }
         else
         {
-            Debug.LogError("Save file not found at: " + path);
+            Debug.LogError($"Save file for '{playerName}' not found at: {path}");
         }
     }
 
@@ -126,8 +132,9 @@ public class Player : MonoBehaviour
         survival = bonusWisdom + (proficienciesSkillsList.Contains("Survival") ? proficiencyBonus : 0);
     }
     
-    private void AddToInventory()
+    public void AddToInventory()
     {
+        inventoryManager = GameObject.Find("InvenroryPanel").GetComponent<InventoryManager>();
         foreach (var item in inventory)
         {
             inventoryManager.AddItem(item);
