@@ -12,6 +12,10 @@ public class Player : MonoBehaviour
     public string characterClass;
     public string race;
     public int hp;
+    public int remainingHp;
+    public int defense;
+    public int iniciative;
+    public int speed;
 
     public int level;
     public int xp;

@@ -4,18 +4,117 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System.IO;
+using System;
 
 public class CharacterButtonManager : MonoBehaviour
 {
     public GameObject buttonPrefab;
     public Transform buttonContainer;
 
+    public GameObject viewCharacters1;
+    public GameObject viewCharacters2;
+
     private string saveDirectory;
+
+
+    public TextMeshProUGUI showName;
+    public TextMeshProUGUI showClass;
+    public TextMeshProUGUI showRace;
+
+    public TextMeshProUGUI showHpText;
+    public TextMeshProUGUI showRemainingHpText;
+    public TextMeshProUGUI showIniciative;
+    public TextMeshProUGUI showSpeed;
+    public TextMeshProUGUI showDefense;
+
+    public TextMeshProUGUI showStrengthText;
+    public TextMeshProUGUI showIntelligenceText;
+    public TextMeshProUGUI showDexterityText;
+    public TextMeshProUGUI showWisdomText;
+    public TextMeshProUGUI showConstitutionText;
+    public TextMeshProUGUI showCharismaText;
+
+    public TextMeshProUGUI showBonusStrengthText;
+    public TextMeshProUGUI showBonusIntelligenceText;
+    public TextMeshProUGUI showBonusDexterityText;
+    public TextMeshProUGUI showBonusWisdomText;
+    public TextMeshProUGUI showBonusConstitutionText;
+    public TextMeshProUGUI showBonusCharismaText;
+
+    public TextMeshProUGUI acrobatics;
+    public TextMeshProUGUI animalHandling;
+    public TextMeshProUGUI arcana;
+    public TextMeshProUGUI athletics;
+    public TextMeshProUGUI deception;
+    public TextMeshProUGUI history;
+    public TextMeshProUGUI insight;
+    public TextMeshProUGUI intimidation;
+    public TextMeshProUGUI investigation;
+    public TextMeshProUGUI medicine;
+    public TextMeshProUGUI nature;
+    public TextMeshProUGUI perception;
+    public TextMeshProUGUI performance;
+    public TextMeshProUGUI persuasion;
+    public TextMeshProUGUI religion;
+    public TextMeshProUGUI sleightOfHand;
+    public TextMeshProUGUI stealth;
+    public TextMeshProUGUI survival;
+
+    private Player player;
+
 
     void Start()
     {
         saveDirectory = Application.persistentDataPath;
         GenerateButtons();
+        player = FindObjectOfType<Player>();
+    }
+
+    private void ShowStats()
+    {
+        /*showName.text = player.name;
+        showClass.text = player.characterClass;
+        showRace.text = player.race;*/
+
+        showHpText.text = player.hp.ToString();
+
+        showIniciative.text = player.iniciative.ToString();
+        showSpeed.text = player.speed.ToString();
+        showDefense.text = player.defense.ToString();
+        showRemainingHpText.text = player.remainingHp.ToString();
+
+        showStrengthText.text = player.strength.ToString();
+        showIntelligenceText.text = player.intelligence.ToString();
+        showDexterityText.text = player.dexterity.ToString();
+        showWisdomText.text = player.wisdom.ToString();
+        showConstitutionText.text = player.constitution.ToString();
+        showCharismaText.text = player.charisma.ToString();
+
+        showBonusStrengthText.text = player.bonusStrength.ToString();
+        showBonusIntelligenceText.text = player.bonusIntelligence.ToString();
+        showBonusDexterityText.text = player.bonusDexterity.ToString();
+        showBonusWisdomText.text = player.bonusWisdom.ToString();
+        showBonusConstitutionText.text = player.bonusConstitution.ToString();
+        showBonusCharismaText.text = player.bonusCharisma.ToString();
+
+        acrobatics.text = player.acrobatics.ToString();
+        animalHandling.text = player.animalHandling.ToString();
+        arcana.text = player.arcana.ToString();
+        athletics.text = player.athletics.ToString();
+        deception.text = player.deception.ToString();
+        history.text = player.history.ToString();
+        insight.text = player.insight.ToString();
+        intimidation.text = player.intimidation.ToString();
+        investigation.text = player.investigation.ToString();
+        medicine.text = player.medicine.ToString();
+        nature.text = player.nature.ToString();
+        perception.text = player.perception.ToString();
+        performance.text = player.performance.ToString();
+        persuasion.text = player.persuasion.ToString();
+        religion.text = player.religion.ToString();
+        sleightOfHand.text = player.sleightOfHand.ToString();
+        stealth.text = player.stealth.ToString();
+        survival.text = player.survival.ToString();
     }
 
     void GenerateButtons()
@@ -104,5 +203,9 @@ public class CharacterButtonManager : MonoBehaviour
         {
             Debug.LogError($"File not found: {filePath}");
         }
+
+        viewCharacters1.SetActive(false);
+        viewCharacters2.SetActive(true);
+        ShowStats();
     }
 }
