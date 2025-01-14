@@ -56,7 +56,8 @@ public class SkillSelection : MonoBehaviour
 
         switch (characterClass)
         {
-            case "Barbar": 
+            //"Barbarian", "Bard", "Clerik", "Druid", "Fighter", "Monk", "Paladin", "Ranger", "Rogue", "Sorcerer", "Warlock", "Wizard"
+            case "Barbarian": 
                 chooseSkills(SkillsBarbar, 2);
                 break;
 
@@ -64,15 +65,15 @@ public class SkillSelection : MonoBehaviour
                 chooseSkills(SkillsBard, 3);
                 break;
 
-            case "Bojovník":
+            case "Fighter":
                 chooseSkills(SkillsBojovnik, 2);
                 break;
 
-            case "Èarodìj":
+            case "Wizard":
                 chooseSkills(SkillsCarodej, 2);
                 break;
 
-            case "Èernoknìžník":
+            case "Warlock":
                 chooseSkills(SkillsCernokneznik, 2);
                 break;
 
@@ -80,27 +81,27 @@ public class SkillSelection : MonoBehaviour
                 chooseSkills(SkillsDruid, 2);
                 break;
 
-            case "Hranicar":
+            case "Ranger":
                 chooseSkills(SkillsHranicar, 3);
                 break;
 
-            case "Klerik":
+            case "Clerik":
                 chooseSkills(SkillsKlerik, 2);
                 break;
 
-            case "Kouzelník":
+            case "Sorcerer":
                 chooseSkills(SkillsKouzelnik, 2);
                 break;
 
-            case "Mnich":
+            case "Monk":
                 chooseSkills(SkillsMnich, 2);
                 break;
 
-            case "paladin":
+            case "Paladin":
                 chooseSkills(SkillsPaladin, 2);
                 break;
 
-            case "Tulák":
+            case "Rogue":
                 chooseSkills(SkillsTulak, 4);
                 break;
         }

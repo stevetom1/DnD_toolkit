@@ -102,17 +102,17 @@ public class character : MonoBehaviour
 
     private string[] characterClasses = new string[]
     {
-        "Barbar", "Bard", "Bojovník", "Èarodìj", "Èernoknìžník", "Druid", "Hranièáø", "Klerik", "Kouzelník", "Mnich", "Paladin", "Tulák"
+        "Barbarian", "Bard", "Clerik", "Druid", "Fighter", "Monk", "Paladin", "Ranger", "Rogue", "Sorcerer", "Warlock", "Wizard"
     };
 
     private int[] classHPValues = new int[]
     {
-        12, 8, 10, 6, 8, 8, 10, 8, 6, 8, 10, 8
+        12, 8, 8, 8, 10, 8, 10, 10, 8, 6, 8, 6
     };
 
     private string[] races = new string[]
     {
-        "Èlovìk", "Lesní elf", "Temný elf", "Vznešený elf", "Hobit Poøízek", "Hobit Tichošlápek", "Horský trpaslík", "Kopcový trpaslík", "Tiefling"
+        "Human", "Wood elf", "Drow", "High elf", "Stout Halfling", "Lightfoot Halfling", "Mountain Dwarf", "Hill Dwarf", "Tiefling"
     };
 
     private int currentClassIndex = 0;
@@ -227,30 +227,31 @@ public class character : MonoBehaviour
         int baseValue = assignedStats[statIndex];
 
 
-        if (race == "èlovìk")
+        if (race == "Human")
         {
             baseValue += 1;
         }
-        else if (race == "Lesní elf" || race == "Temný elf" || race == "Vznešený elf")
+        else if (race == "Wood elf" || race == "Drow" || race == "High elf")
         {
             if (statIndex == 2) baseValue += 2;
 
-            if (race == "Vznešený elf" && statIndex == 1) baseValue += 1;
-            else if (race == "Lesní elf" && statIndex == 3) baseValue += 1;
+            if (race == "High elf" && statIndex == 1) baseValue += 1;
+            else if (race == "Wood elf" && statIndex == 3) baseValue += 1;
+            else if (race == "Drow" && statIndex == 5) baseValue += 1;
         }
-        else if (race == "Hobit Poøízek" || race == "Hobit Tichošlápek")
+        else if (race == "Stout Halfling" || race == "Lightfoot Halfling")
         {
             if (statIndex == 2) baseValue += 2;
 
-            if (race == "Hobit Poøízek" && statIndex == 4) baseValue += 1;
-            else if (race == "Hobit Tichošlápek" && statIndex == 5) baseValue += 1;
+            if (race == "Stout Halfling" && statIndex == 4) baseValue += 1;
+            else if (race == "Lightfoot Halfling" && statIndex == 5) baseValue += 1;
         }
-        else if (race == "Horský trpaslík" || race == "Kopcový trpaslík")
+        else if (race == "Mountain Dwarf" || race == "Hill Dwarf")
         {
             if (statIndex == 4) baseValue += 2;
 
-            if (race == "Horský trpaslík" && statIndex == 0) baseValue += 2;
-            else if (race == "Kopcový trpaslík" && statIndex == 3) baseValue += 1;
+            if (race == "Mountain Dwarf" && statIndex == 0) baseValue += 2;
+            else if (race == "Hill Dwarf" && statIndex == 3) baseValue += 1;
         }
         else if (race == "Tiefling")
         {

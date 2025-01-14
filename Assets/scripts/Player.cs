@@ -61,6 +61,19 @@ public class Player : MonoBehaviour
 
     public void SaveToFile()
     {
+        remainingHp = hp;
+
+        if (race == "Human") speed = 5;
+        if (race == "Drow" || race == "High elf") speed = 6;
+        if (race == "Wood elf") speed = 7;
+        if (race == "Stout Halfling" || race == "Lightfoot Halfling") speed = 5;
+        if (race == "Mountain Dwarf" || race == "Hill Dwarf") speed = 5;
+        if (race == "Tiefling") speed = 6;
+
+        defense = 10;
+        iniciative = bonusDexterity;
+
+
         if (string.IsNullOrEmpty(name))
         {
             Debug.LogError("Player name is empty! Cannot save data.");
