@@ -178,8 +178,6 @@ public class character : MonoBehaviour
         availableStats.Reverse();
         DisplayAvailableStats();
 
-        int bonusStrength = Mathf.FloorToInt((stats[0] / 2)) - 5;
-
         ResetAssignedStats();
 
         strengthText.text = "0";

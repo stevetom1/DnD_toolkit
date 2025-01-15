@@ -61,6 +61,7 @@ public class Player : MonoBehaviour
 
     public void SaveToFile()
     {
+        hp += bonusConstitution;
         remainingHp = hp;
 
         if (race == "Human") speed = 5;
