@@ -102,7 +102,7 @@ public class character : MonoBehaviour
 
     private string[] characterClasses = new string[]
     {
-        "Barbarian", "Bard", "Clerik", "Druid", "Fighter", "Monk", "Paladin", "Ranger", "Rogue", "Sorcerer", "Warlock", "Wizard"
+        "Barbarian", "Bard", "Cleric", "Druid", "Fighter", "Monk", "Paladin", "Ranger", "Rogue", "Sorcerer", "Warlock", "Wizard"
     };
 
     private int[] classHPValues = new int[]
@@ -334,6 +334,9 @@ public class character : MonoBehaviour
         intelligence = int.Parse(intelligenceText.text);
         wisdom = int.Parse(wisdomText.text);
         charisma = int.Parse(charismaText.text);
+
+        player.hp += player.bonusConstitution;
+
 
         player.EnterValuesStats(strength, dexterity, constitution, intelligence, wisdom, charisma);
     }

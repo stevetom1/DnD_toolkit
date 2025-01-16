@@ -61,7 +61,6 @@ public class Player : MonoBehaviour
 
     public void SaveToFile()
     {
-        hp += bonusConstitution;
         remainingHp = hp;
 
         if (race == "Human") speed = 5;
@@ -71,7 +70,7 @@ public class Player : MonoBehaviour
         if (race == "Mountain Dwarf" || race == "Hill Dwarf") speed = 5;
         if (race == "Tiefling") speed = 6;
 
-        defense = 10;
+        defense = 10 + bonusDexterity;
         iniciative = bonusDexterity;
 
 

@@ -72,9 +72,9 @@ public class CharacterButtonManager : MonoBehaviour
 
     private void ShowStats()
     {
-        /*showName.text = player.name;
+        showName.text = player.name;
         showClass.text = player.characterClass;
-        showRace.text = player.race;*/
+        showRace.text = player.race;
 
         showHpText.text = player.hp.ToString();
 

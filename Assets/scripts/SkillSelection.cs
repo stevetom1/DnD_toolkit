@@ -56,7 +56,7 @@ public class SkillSelection : MonoBehaviour
 
         switch (characterClass)
         {
-            //"Barbarian", "Bard", "Clerik", "Druid", "Fighter", "Monk", "Paladin", "Ranger", "Rogue", "Sorcerer", "Warlock", "Wizard"
+            //"Barbarian", "Bard", "Cleric", "Druid", "Fighter", "Monk", "Paladin", "Ranger", "Rogue", "Sorcerer", "Warlock", "Wizard"
             case "Barbarian": 
                 chooseSkills(SkillsBarbar, 2);
                 break;
@@ -85,7 +85,7 @@ public class SkillSelection : MonoBehaviour
                 chooseSkills(SkillsHranicar, 3);
                 break;
 
-            case "Clerik":
+            case "Cleric":
                 chooseSkills(SkillsKlerik, 2);
                 break;
 
