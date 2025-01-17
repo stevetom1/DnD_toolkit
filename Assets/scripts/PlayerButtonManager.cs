@@ -131,10 +131,10 @@ public class CharacterButtonManager : MonoBehaviour
             return;
         }
 
-        foreach (Transform child in buttonContainer)
+        /*foreach (Transform child in buttonContainer)
         {
             Destroy(child.gameObject);
-        }
+        }*/
 
         string[] files = Directory.GetFiles(saveDirectory, "*.json");
 
@@ -164,7 +164,7 @@ public class CharacterButtonManager : MonoBehaviour
             }
             else
             {
-                Debug.LogError("Button prefab does not contain a Text or TextMeshProUGUI component!");
+                Debug.LogError("Button prefab does not contain a Text or TextMeshProUGUI component");
                 continue;
             }
 
@@ -175,7 +175,7 @@ public class CharacterButtonManager : MonoBehaviour
             }
             else
             {
-                Debug.LogError("Button prefab does not contain a Button component!");
+                Debug.LogError("Button prefab does not contain a Button component");
             }
         }
     }
@@ -196,7 +196,7 @@ public class CharacterButtonManager : MonoBehaviour
             }
             else
             {
-                Debug.LogError("Player script not found on Character GameObject!");
+                Debug.LogError("Player script not found on Character GameObject");
             }
         }
         else
