@@ -15,6 +15,7 @@ public abstract class SOItems : ScriptableObject
 public enum SlotType { Cloak, Necklace, Ring, Armor, RightHand, LeftHand, Belt, Boots }
 public enum ItemType { Weapon, Armor, Consumable, Trinket, Instrument, None }
 public enum DamageType { Acid, Bludgeoning, Cold, Fire, Force, Lightning, Necrotic, Piercing, Poison, Psychic, Radiant, Slashing, Thunder }
+public enum StatusType { Blinded, Charmed, Deafened, Frightened, Grappled, Incapacitated, Invisible, Paralyzed, Petrified, Poisoned, Prone, Restrained, Stunned, Unconscious}
 public enum WeaponType { Melee, Ranged, Throwing }
 public enum ArmorType { Light, Medium, Heavy, Shield }
 [System.Serializable] public class DamageRoll
