@@ -5,15 +5,20 @@ using System.IO;
 using UnityEngine.UI;
 using TMPro;
 using Unity.VisualScripting;
+using SQLite;
 
 public class Enemy : MonoBehaviour
 {
+    [PrimaryKey, AutoIncrement]
+    public int Id { get; set; }
+
+
     [field: SerializeField] public string EnemyName { get; set; }
     public int MaxHp { get; set; }
     public int Defense { get; set; }
     public int Speed { get; set; }
-    [field: SerializeField] public Size EnemySize { get; set; }
-    [field: SerializeField] public Type EnemyType { get; set; }
+    //[field: SerializeField] public Size EnemySize { get; set; }
+    //[field: SerializeField] public Type EnemyType { get; set; }
     public int Experience { get; set; }
     public int NumberOfAttacks { get; set; }
 
@@ -38,10 +43,11 @@ public class Enemy : MonoBehaviour
     public int STBonusWisdom { get; set; }
     [field:SerializeField]public int STBonusCharisma { get; set; }
 
-    [field: SerializeField] public List<DamageType> Weakneses { get; set; }
-    [field: SerializeField] public List<DamageType> Vulnerability { get; set; }
-    [field: SerializeField] public List<DamageType> Immunity { get; set; }
-    [field: SerializeField] public List<StatusType> ImmunityAgaintsStatus { get; set; }
+    //[field: SerializeField] public List<DamageType> Weakneses { get; set; }
+    //[field: SerializeField] public List<DamageType> Vulnerability { get; set; }
+    //[field: SerializeField] public List<DamageType> Immunity { get; set; }
+    //[field: SerializeField] public List<StatusType> ImmunityAgaintsStatus { get; set; }
+    //[field: SerializeField] public List<EnemyAction> EnemyAction { get; set; }
 
     public TMP_InputField enemyNameText;
     public TMP_InputField hpText;
@@ -71,6 +77,10 @@ public class Enemy : MonoBehaviour
     public DropdownManager immunityDropdown;
     public DropdownStatus immunityAgaintsStatusDropdown;
 
+    public EnemyAction enemyActionList;
+
+    private DatabaseManager databaseManager;
+
     public void Start()
     {
         weaknesesDropdown = GameObject.Find("Weakneses").GetComponent<DropdownManager>();
@@ -80,48 +90,68 @@ public class Enemy : MonoBehaviour
 
     }
 
-    public void SetEnemyStatsButton()
+    public void SetEnemyActionList()
     {
-        EnemyName = enemyNameText.text;
-        MaxHp = int.Parse(hpText.text);
-        Defense = int.Parse(defenseText.text);
-        Speed =  int.Parse(speedText.text);
-        EnemySize = (Size)enemySizeText.value;
-        EnemyType = (Type)enemyTypeText.value;
-        Experience = int.Parse(experienceText.text);
-        NumberOfAttacks = int.Parse(numberOfAttacksText.text);
-
-        Strength = int.Parse(strengthText.text);
-        Dexterity = int.Parse(dexterityText.text);
-        Constitution = int.Parse(constitutionText.text);
-        Intelligence = int.Parse(intelligenceText.text);
-        Wisdom = int.Parse(wisdomText.text);
-        Charisma = int.Parse(charismaText.text);
-
-        BonusStrength = Mathf.FloorToInt((Strength - 10) / 2f);
-        BonusDexterity = Mathf.FloorToInt((Dexterity - 10) / 2f);
-        BonusConstitution = Mathf.FloorToInt((Constitution - 10) / 2f);
-        BonusIntelligence = Mathf.FloorToInt((Intelligence - 10) / 2f);
-        BonusWisdom = Mathf.FloorToInt((Wisdom - 10) / 2f);
-        BonusCharisma = Mathf.FloorToInt((Charisma - 10) / 2f);
-
-        STBonusStrength = int.Parse(STBonusStrengthText.text);
-        STBonusDexterity = int.Parse(STBonusDexterityText.text);
-        STBonusConstitution = int.Parse(STBonusConstitutionText.text);
-        STBonusIntelligence = int.Parse(STBonusIntelligenceText.text);
-        STBonusWisdom = int.Parse(STBonusWisdomText.text);
-        STBonusCharisma = int.Parse(STBonusCharismaText.text);
-}
-
-    public void SetVulnerabilityButton()
-    {
-        Weakneses = weaknesesDropdown.damageType;
-        Vulnerability = vulnerabilityDropdown.damageType;
-        Immunity = immunityDropdown.damageType;
-        ImmunityAgaintsStatus = immunityAgaintsStatusDropdown.statusType;
+        enemyActionList = GameObject.Find("Enemy").GetComponent<EnemyAction>();
+        //EnemyAction = enemyActionList.enemyActionList;
     }
 
-}
 
-public enum Size { Fine, Diminutive, Tiny, Small, Medium, Large, Huge, Gargantuan, Colossal }
-public enum Type { Aberration, Beast, Celestial, Construct, Dragon, Elemental, Fey, Fiend, Giant, Humanoid, Monstrosity, Ooze, Plant, Undead }
+    public void CreateEnemyButton()
+    {
+        DatabaseManager databaseManager = GameObject.Find("DatabaseManager")?.GetComponent<DatabaseManager>();
+        if (databaseManager == null)
+        {
+            Debug.LogError("DatabaseManager object not found in the scene!");
+            return;
+        }
+
+        Enemy enemy = gameObject.AddComponent<Enemy>();
+        try
+        {
+            enemy.EnemyName = enemyNameText.text;
+            enemy.MaxHp = int.Parse(hpText.text);
+            enemy.Defense = int.Parse(defenseText.text);
+            enemy.Speed = int.Parse(speedText.text);
+            //enemy.EnemySize = (Size)enemySizeText.value;
+            //enemy.EnemyType = (Type)enemyTypeText.value;
+            enemy.Experience = int.Parse(experienceText.text);
+            enemy.NumberOfAttacks = int.Parse(numberOfAttacksText.text);
+
+            enemy.Strength = int.Parse(strengthText.text);
+            enemy.Dexterity = int.Parse(dexterityText.text);
+            enemy.Constitution = int.Parse(constitutionText.text);
+            enemy.Intelligence = int.Parse(intelligenceText.text);
+            enemy.Wisdom = int.Parse(wisdomText.text);
+            enemy.Charisma = int.Parse(charismaText.text);
+
+            enemy.BonusStrength = Mathf.FloorToInt((enemy.Strength - 10) / 2f);
+            enemy.BonusDexterity = Mathf.FloorToInt((enemy.Dexterity - 10) / 2f);
+            enemy.BonusConstitution = Mathf.FloorToInt((enemy.Constitution - 10) / 2f);
+            enemy.BonusIntelligence = Mathf.FloorToInt((enemy.Intelligence - 10) / 2f);
+            enemy.BonusWisdom = Mathf.FloorToInt((enemy.Wisdom - 10) / 2f);
+            enemy.BonusCharisma = Mathf.FloorToInt((enemy.Charisma - 10) / 2f);
+
+            enemy.STBonusStrength = int.Parse(STBonusStrengthText.text);
+            enemy.STBonusDexterity = int.Parse(STBonusDexterityText.text);
+            enemy.STBonusConstitution = int.Parse(STBonusConstitutionText.text);
+            enemy.STBonusIntelligence = int.Parse(STBonusIntelligenceText.text);
+            enemy.STBonusWisdom = int.Parse(STBonusWisdomText.text);
+            enemy.STBonusCharisma = int.Parse(STBonusCharismaText.text);
+
+            //enemy.Weakneses = weaknesesDropdown.damageType;
+            //enemy.Vulnerability = vulnerabilityDropdown.damageType;
+            //enemy.Immunity = immunityDropdown.damageType;
+            //enemy.ImmunityAgaintsStatus = immunityAgaintsStatusDropdown.statusType;
+
+            databaseManager.SaveEnemy(enemy);
+            Debug.Log($"Enemy '{enemy.EnemyName}' saved successfully.");    
+        }
+        catch (System.Exception ex)
+        {
+            Debug.LogError($"Failed to create enemy: {ex.Message}");
+        }
+    }
+
+
+}

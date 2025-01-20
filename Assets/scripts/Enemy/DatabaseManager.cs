@@ -1,86 +1,86 @@
-// Definice trid
 using SQLite;
 using System.Collections.Generic;
+using System.Collections;
+using UnityEngine;
+using System.IO;
+using UnityEngine.UI;
+using TMPro;
+using Unity.VisualScripting;
+using UnityEditor.MemoryProfiler;
 
-public class Monster
-{
-    public int Id { get; set; }
-    public string Name { get; set; }
-    public int Health { get; set; }
-    public string Type { get; set; }
-    public List<Attack> Attacks { get; set; }
-    public List<Spell> Spells { get; set; }
-    public List<Ability> Abilities { get; set; }
-}
-
-public class Attack
-{
-    public int Id { get; set; }
-    public int MonsterId { get; set; }
-    public string AttackName { get; set; }
-    public int Damage { get; set; }
-}
-
-public class Spell
-{
-    public int Id { get; set; }
-    public int MonsterId { get; set; }
-    public string SpellName { get; set; }
-    public int ManaCost { get; set; }
-    public string Effect { get; set; }
-}
-
-public class Ability
-{
-    public int Id { get; set; }
-    public int MonsterId { get; set; }
-    public string AbilityName { get; set; }
-    public string Description { get; set; }
-}
-
-//Ulozeni a nacitani dat z databaze
-public class DatabaseManager
+public class DatabaseManager : MonoBehaviour
 {
     private SQLiteConnection db;
 
-    public DatabaseManager(string dbPath)
+    private void Start()
     {
+        string dbPath = $"{Application.persistentDataPath}/MyDb.db";
+
         db = new SQLiteConnection(dbPath);
-        db.CreateTable<Monster>();
-        db.CreateTable<Attack>();
-        db.CreateTable<Spell>();
-        db.CreateTable<Ability>();
+        Debug.Log($"Database created at: {dbPath}");
+        InitializeDatabase();
     }
 
-    public void SaveMonster(Monster monster)
+
+    private void InitializeDatabase()
     {
-        db.Insert(monster);
-        foreach (var attack in monster.Attacks)
+        try
         {
-            attack.MonsterId = monster.Id;
-            db.Insert(attack);
+            db.CreateTable<Enemy>();
+            db.CreateTable<EnemyAction>();
+            Debug.Log("Database tables created successfully.");
         }
-        foreach (var spell in monster.Spells)
+        catch (System.Exception ex)
         {
-            spell.MonsterId = monster.Id;
-            db.Insert(spell);
-        }
-        foreach (var ability in monster.Abilities)
-        {
-            ability.MonsterId = monster.Id;
-            db.Insert(ability);
+            Debug.LogError($"Failed to initialize database: {ex.Message}");
         }
     }
 
-    public List<Monster> GetAllMonsters()
+    public void SaveEnemy(Enemy enemy)
     {
-        var monsters = db.Table<Monster>().ToList();
-        foreach (var monster in monsters)
+        if (db == null)
         {
-            monster.Attacks = db.Table<Attack>().Where(a => a.MonsterId == monster.Id).ToList();
-            monster.Spells = db.Table<Spell>().Where(s => s.MonsterId == monster.Id).ToList();
-            monster.Abilities = db.Table<Ability>().Where(a => a.MonsterId == monster.Id).ToList();
+            Debug.LogError("Database connection is not initialized.");
+            return;
         }
-        return monsters;
+        try
+        {
+            db.Insert(enemy);
+            /*foreach (var action in enemy.EnemyAction)
+            {
+                action.EnemyId = enemy.Id;
+                db.Insert(action);
+            }*/
+            Debug.Log($"Enemy '{enemy.EnemyName}' saved successfully.");
+        }
+        catch (System.Exception ex)
+        {
+            Debug.LogError($"Failed to save enemy: {ex.Message}");
+        }
+    }
+
+    public List<Enemy> GetAllMonsters()
+    {
+        if (db == null)
+        {
+            Debug.LogError("Database connection is not initialized.");
+            return null;
+        }
+        try
+        {
+            var monsters = db.Table<Enemy>().ToList();
+            /*foreach (var monster in monsters)
+            {
+                monster.EnemyAction = db.Table<EnemyAction>()
+                    .Where(a => a.EnemyId == monster.Id).ToList();
+            }*/
+            return monsters;
+        }
+        catch (System.Exception ex)
+        {
+            Debug.LogError($"Failed to fetch monsters: {ex.Message}");
+            return null;
+        }
     }
 }
+

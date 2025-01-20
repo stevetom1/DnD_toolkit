@@ -117,7 +117,7 @@ public class CharacterButtonManager : MonoBehaviour
         survival.text = player.survival.ToString();
     }
 
-    void GenerateButtons()
+    public void GenerateButtons()
     {
         if (buttonPrefab == null)
         {
@@ -131,10 +131,10 @@ public class CharacterButtonManager : MonoBehaviour
             return;
         }
 
-        /*foreach (Transform child in buttonContainer)
+        foreach (Transform child in buttonContainer)
         {
             Destroy(child.gameObject);
-        }*/
+        }
 
         string[] files = Directory.GetFiles(saveDirectory, "*.json");
 
