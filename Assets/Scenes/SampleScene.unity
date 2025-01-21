@@ -46797,6 +46797,7 @@ MonoBehaviour:
   damageCountInput: {fileID: 116353619}
   damageDiceDropdown: {fileID: 163750418}
   bonusDamageInput: {fileID: 1218034980}
+  enemyActionList: []
 --- !u!1 &942778530
 GameObject:
   m_ObjectHideFlags: 0
@@ -57252,7 +57253,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 588857534}
+      - m_Target: {fileID: 1863175842}
         m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
         m_MethodName: SetActive
         m_Mode: 6

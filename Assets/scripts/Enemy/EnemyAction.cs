@@ -32,7 +32,7 @@ public class EnemyAction : MonoBehaviour
     public TMP_InputField damageCountInput;
     public TMP_Dropdown damageDiceDropdown;
     public TMP_InputField bonusDamageInput;
-    //public List<EnemyAction> enemyActionList;
+    public List<EnemyAction> enemyActionList;
 
     public void SetEnemyAction()
     {
@@ -44,7 +44,7 @@ public class EnemyAction : MonoBehaviour
         enemyAction.DamageCount = int.Parse(damageCountInput.text);
         enemyAction.DamageDice = damageDiceDropdown.value;
         enemyAction.BonusDamage = int.Parse(bonusDamageInput.text);
-        //enemyActionList.Add(enemyAction);
+        enemyActionList.Add(enemyAction);
         UpdateListDisplay();
     }
 
@@ -52,10 +52,10 @@ public class EnemyAction : MonoBehaviour
     void UpdateListDisplay()
     {
         string actionTextDisplay = "";
-        /*foreach (EnemyAction item in enemyActionList)
+        foreach (EnemyAction item in enemyActionList)
         {
             actionTextDisplay += item.ActionName + ", ";
-        }*/
+        }
         actionsText.text = actionTextDisplay;
     }
 }
