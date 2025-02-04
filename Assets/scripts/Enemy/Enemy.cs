@@ -17,8 +17,8 @@ public class Enemy : MonoBehaviour
     public int MaxHp { get; set; }
     public int Defense { get; set; }
     public int Speed { get; set; }
-    //[field: SerializeField] public Size EnemySize { get; set; }
-    //[field: SerializeField] public Type EnemyType { get; set; }
+    [field: SerializeField] public Size EnemySize { get; set; }
+    [field: SerializeField] public Type EnemyType { get; set; }
     public int Experience { get; set; }
     public int NumberOfAttacks { get; set; }
 
@@ -43,11 +43,11 @@ public class Enemy : MonoBehaviour
     public int STBonusWisdom { get; set; }
     [field:SerializeField]public int STBonusCharisma { get; set; }
 
-    //[field: SerializeField] public List<DamageType> Weakneses { get; set; }
-    //[field: SerializeField] public List<DamageType> Vulnerability { get; set; }
-    //[field: SerializeField] public List<DamageType> Immunity { get; set; }
-    //[field: SerializeField] public List<StatusType> ImmunityAgaintsStatus { get; set; }
-    //[field: SerializeField] public List<EnemyAction> EnemyAction { get; set; }
+    [field: SerializeField] public List<DamageType> Weakneses { get; set; }
+    [field: SerializeField] public List<DamageType> Vulnerability { get; set; }
+    [field: SerializeField] public List<DamageType> Immunity { get; set; }
+    [field: SerializeField] public List<StatusType> ImmunityAgaintsStatus { get; set; }
+    [field: SerializeField] public List<EnemyAction> EnemyAction { get; set; }
 
     public TMP_InputField enemyNameText;
     public TMP_InputField hpText;
@@ -93,7 +93,7 @@ public class Enemy : MonoBehaviour
     public void SetEnemyActionList()
     {
         enemyActionList = GameObject.Find("Enemy").GetComponent<EnemyAction>();
-        //EnemyAction = enemyActionList.enemyActionList;
+        EnemyAction = enemyActionList.enemyActionList;
     }
 
 
@@ -113,8 +113,8 @@ public class Enemy : MonoBehaviour
             enemy.MaxHp = int.Parse(hpText.text);
             enemy.Defense = int.Parse(defenseText.text);
             enemy.Speed = int.Parse(speedText.text);
-            //enemy.EnemySize = (Size)enemySizeText.value;
-            //enemy.EnemyType = (Type)enemyTypeText.value;
+            enemy.EnemySize = (Size)enemySizeText.value;
+            enemy.EnemyType = (Type)enemyTypeText.value;
             enemy.Experience = int.Parse(experienceText.text);
             enemy.NumberOfAttacks = int.Parse(numberOfAttacksText.text);
 
@@ -139,10 +139,12 @@ public class Enemy : MonoBehaviour
             enemy.STBonusWisdom = int.Parse(STBonusWisdomText.text);
             enemy.STBonusCharisma = int.Parse(STBonusCharismaText.text);
 
-            //enemy.Weakneses = weaknesesDropdown.damageType;
-            //enemy.Vulnerability = vulnerabilityDropdown.damageType;
-            //enemy.Immunity = immunityDropdown.damageType;
-            //enemy.ImmunityAgaintsStatus = immunityAgaintsStatusDropdown.statusType;
+            enemy.Weakneses = weaknesesDropdown.damageType;
+            enemy.Vulnerability = vulnerabilityDropdown.damageType;
+            enemy.Immunity = immunityDropdown.damageType;
+            enemy.ImmunityAgaintsStatus = immunityAgaintsStatusDropdown.statusType;
+
+            enemy.EnemyAction = EnemyAction;
 
             databaseManager.SaveEnemy(enemy);
             Debug.Log($"Enemy '{enemy.EnemyName}' saved successfully.");    

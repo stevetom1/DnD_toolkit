@@ -15,13 +15,13 @@ public class EnemyAction : MonoBehaviour
     public int EnemyId { get; set; }
 
     [field: SerializeField] public string ActionName { get; set; }
-    public int Reach { get; set; }
-    public int Bonus { get; set; }
-    //public DamageType DamageType { get; set; }
+    [field: SerializeField]public int Reach { get; set; }
+    [field: SerializeField] public int Bonus { get; set; }
+    [field: SerializeField] public DamageType DamageType { get; set; }
     [field: SerializeField] public int DamageCount { get; set; }
-    [field: SerializeField] public int DamageDice { get; set; }
+    [field: SerializeField] public string DamageDice { get; set; }
     [field: SerializeField] public int BonusDamage { get; set; }
-   // public List<EnemyActionEffect> EnemyActionEffect { get; set; }
+    public List<EnemyActionEffect> EnemyActionEffect { get; set; }
 
     public TextMeshProUGUI actionsText;
 
@@ -40,9 +40,9 @@ public class EnemyAction : MonoBehaviour
         enemyAction.ActionName = actionNameInput.text;
         enemyAction.Reach = int.Parse(reachInput.text);
         enemyAction.Bonus = int.Parse(bonusInput.text);
-        //enemyAction.DamageType = (DamageType)damageTypeDropdown.value;
+        enemyAction.DamageType = (DamageType)damageTypeDropdown.value;
         enemyAction.DamageCount = int.Parse(damageCountInput.text);
-        enemyAction.DamageDice = damageDiceDropdown.value;
+        enemyAction.DamageDice = damageDiceDropdown.value.ToString();
         enemyAction.BonusDamage = int.Parse(bonusDamageInput.text);
         enemyActionList.Add(enemyAction);
         UpdateListDisplay();
