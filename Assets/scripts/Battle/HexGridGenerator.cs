@@ -5,16 +5,23 @@ public class HexGridGenerator : MonoBehaviour
 {
     public GameObject hexPrefab;
     public RectTransform panel;
+    public GameObject buttonPrefab;
     public int gridWidth = 5;
     public int gridHeight = 5;
     public float hexSize = 50f;
-    public float spacing = 50f;
+    public float spacing = 5f;
 
     private float hexWidth;
     private float hexHeight;
 
     void Start()
     {
+        if (buttonPrefab == null)
+        {
+            Debug.LogError("Button prefab is not assigned in HexGridGenerator.");
+            return;
+        }
+
         hexWidth = hexSize * 2 + spacing;
         hexHeight = Mathf.Sqrt(3) * hexSize + spacing;
         GenerateHexGrid();
@@ -36,7 +43,7 @@ public class HexGridGenerator : MonoBehaviour
                 hex.GetComponent<RectTransform>().anchoredPosition = position;
 
                 HexTile hexTile = hex.AddComponent<HexTile>();
-                hexTile.SetupHexTile();
+                hexTile.SetupHexTile(buttonPrefab);
             }
         }
     }
