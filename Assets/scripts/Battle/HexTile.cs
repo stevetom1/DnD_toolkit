@@ -5,14 +5,15 @@ public class HexTile : MonoBehaviour
 {
     public Color highlightColor = Color.yellow;
     private Button button;
-    private GameObject[] actionButtons;
+    private GameObject moveButton, attackButton, defendButton;
     private bool buttonsVisible = false;
+    private float buttonSpacing = 10f;
 
-    public void SetupHexTile(GameObject buttonPrefab)
+    public void SetupHexTile(GameObject movePrefab, GameObject attackPrefab, GameObject defendPrefab)
     {
-        if (buttonPrefab == null)
+        if (movePrefab == null || attackPrefab == null || defendPrefab == null)
         {
-            Debug.LogError("Button prefab is not assigned in HexTile.");
+            Debug.LogError("One or more button prefabs are not assigned in HexTile.");
             return;
         }
 
@@ -22,13 +23,17 @@ public class HexTile : MonoBehaviour
             image.color = Color.white;
         }
 
-        actionButtons = new GameObject[3];
-        for (int i = 0; i < 3; i++)
-        {
-            GameObject button = Instantiate(buttonPrefab, transform.parent);
-            button.SetActive(false);
-            actionButtons[i] = button;
-        }
+        moveButton = Instantiate(movePrefab, transform.parent.parent);
+        attackButton = Instantiate(attackPrefab, transform.parent.parent);
+        defendButton = Instantiate(defendPrefab, transform.parent.parent);
+
+        moveButton.SetActive(false);
+        attackButton.SetActive(false);
+        defendButton.SetActive(false);
+
+        moveButton.GetComponent<Button>().onClick.AddListener(() => MoveAction());
+        attackButton.GetComponent<Button>().onClick.AddListener(() => AttackAction());
+        defendButton.GetComponent<Button>().onClick.AddListener(() => DefendAction());
     }
 
     void Start()
@@ -67,29 +72,48 @@ public class HexTile : MonoBehaviour
 
     void ShowActionButtons()
     {
-        var clickedHexImage = GetComponent<Image>();
-        clickedHexImage.color = highlightColor;
+        GetComponent<Image>().color = highlightColor;
 
         Vector2 position = GetComponent<RectTransform>().anchoredPosition;
 
-        for (int i = 0; i < 3; i++)
-        {
-            actionButtons[i].SetActive(true);
+        float offsetX = 150f;
+        float offsetY = 40f;
 
-            Vector2 buttonPosition = position + new Vector2(i * 60f - 60f, 0);
-            actionButtons[i].GetComponent<RectTransform>().anchoredPosition = buttonPosition;
-        }
+        moveButton.SetActive(true);
+        attackButton.SetActive(true);
+        defendButton.SetActive(true);
+
+        moveButton.transform.SetAsLastSibling();
+        attackButton.transform.SetAsLastSibling();
+        defendButton.transform.SetAsLastSibling();
+
+        moveButton.GetComponent<RectTransform>().anchoredPosition = position + new Vector2(offsetX, offsetY);
+        attackButton.GetComponent<RectTransform>().anchoredPosition = position + new Vector2(offsetX, offsetY - (buttonSpacing + 40f));
+        defendButton.GetComponent<RectTransform>().anchoredPosition = position + new Vector2(offsetX, offsetY - 2 * (buttonSpacing + 40f));
 
         buttonsVisible = true;
     }
 
     void HideActionButtons()
     {
-        foreach (var button in actionButtons)
-        {
-            button.SetActive(false);
-        }
-
+        moveButton.SetActive(false);
+        attackButton.SetActive(false);
+        defendButton.SetActive(false);
         buttonsVisible = false;
+    }
+
+    void MoveAction()
+    {
+        Debug.Log("Move action triggered!");
+    }
+
+    void AttackAction()
+    {
+        Debug.Log("Attack action triggered!");
+    }
+
+    void DefendAction()
+    {
+        Debug.Log("Defend action triggered!");
     }
 }

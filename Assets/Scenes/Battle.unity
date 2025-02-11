@@ -510,7 +510,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hexPrefab: {fileID: 250775556146459697, guid: 9279a08b9f9fd2e41b63f34cf8dbbbec, type: 3}
   panel: {fileID: 1549112094}
-  buttonPrefab: {fileID: 6569490300802780624, guid: 09da2ef85aa5cec4ab5dc576330dd742, type: 3}
+  moveButtonPrefab: {fileID: 7568049801875499852, guid: f6997d40182d7ca45a6e17cb9abb4eae, type: 3}
+  attackButtonPrefab: {fileID: 4061324143910392156, guid: 2d23a2b1953ea2c4bb03342d7f7531f0, type: 3}
+  defendButtonPrefab: {fileID: 3438088030168733112, guid: 9c1ba4d9f95f6014bad9709a4c9b32da, type: 3}
   gridWidth: 10
   gridHeight: 5
   hexSize: 50

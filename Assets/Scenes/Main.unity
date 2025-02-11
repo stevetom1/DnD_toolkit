@@ -711,6 +711,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 10178473}
+  - component: {fileID: 10178474}
   m_Layer: 0
   m_Name: DamageRoll
   m_TagString: Untagged
@@ -735,6 +736,19 @@ Transform:
   - {fileID: 1670707784}
   m_Father: {fileID: 236863039}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &10178474
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 10178472}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e1ceaf80e1d81142b765e906b02b7b2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inputField: {fileID: 1670707785}
 --- !u!1 &12706712
 GameObject:
   m_ObjectHideFlags: 0
@@ -2322,6 +2336,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 35995244}
+  - component: {fileID: 35995245}
   m_Layer: 0
   m_Name: Radius
   m_TagString: Untagged
@@ -2346,6 +2361,19 @@ Transform:
   - {fileID: 271400754}
   m_Father: {fileID: 236863039}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &35995245
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 35995243}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e1ceaf80e1d81142b765e906b02b7b2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inputField: {fileID: 271400755}
 --- !u!1 &37264161
 GameObject:
   m_ObjectHideFlags: 0
@@ -24258,6 +24286,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 481635411}
+  - component: {fileID: 481635412}
   m_Layer: 0
   m_Name: NumberOfTargets
   m_TagString: Untagged
@@ -24282,6 +24311,19 @@ Transform:
   - {fileID: 1458114182}
   m_Father: {fileID: 236863039}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &481635412
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 481635410}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e1ceaf80e1d81142b765e906b02b7b2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inputField: {fileID: 1621307898}
 --- !u!1 &482644068
 GameObject:
   m_ObjectHideFlags: 0
@@ -28245,6 +28287,82 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_IsOn: 0
+--- !u!1 &555719411
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 555719413}
+  - component: {fileID: 555719412}
+  m_Layer: 0
+  m_Name: Spell
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &555719412
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 555719411}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0cff32670a5f0684d936831c190ec9ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spellName: 
+  spellLevel: 0
+  spellCastingTime: 0
+  spellConcentration: 0
+  spellSchool: 0
+  spellDuration: 0
+  spellAreaEffect: 0
+  spellRadius: 0
+  spellTargetType: 0
+  spellNumberOfTargets: 0
+  spellDamageType: 0
+  spellRollAmount: 0
+  spellRollDice: 0
+  spellSavingThrow: 0
+  spellSuccessfulThrow: 0
+  spellClasses: 
+  spellNameInputField: {fileID: 761901829}
+  spellLevelInputField: {fileID: 1913370290}
+  spellCastingTimeDropdown: {fileID: 1016218718}
+  spellConcentrationToggle: {fileID: 751429264}
+  spellSchoolDropdown: {fileID: 2009952975}
+  spellDurationDropdown: {fileID: 2142194609}
+  spellAreaEffectDropdown: {fileID: 401713854}
+  spellRadiusInputField: {fileID: 271400755}
+  spellTargetTypeDropdown: {fileID: 286457184}
+  spellNumberOfTargetsInputField: {fileID: 1621307898}
+  spellDamageTypeDropdown: {fileID: 342586441}
+  spellRollAmountInputField: {fileID: 1670707785}
+  spellRollDiceDropdown: {fileID: 1068573427}
+  spellSavingThrowDropdown: {fileID: 924383039}
+  spellSuccessfulThrowDropdown: {fileID: 1486675008}
+  spellClassesText: {fileID: 805703939}
+--- !u!4 &555719413
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 555719411}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 610.89905, y: 264.51678, z: -3.0311072}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &560348043
 GameObject:
   m_ObjectHideFlags: 0
@@ -30507,6 +30625,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 596858892}
+  - component: {fileID: 596858893}
   m_Layer: 0
   m_Name: Name
   m_TagString: Untagged
@@ -30531,6 +30650,19 @@ Transform:
   - {fileID: 737063136}
   m_Father: {fileID: 236863039}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &596858893
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 596858891}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e118fbb920613594da2e30e8d6a1d296, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inputField: {fileID: 761901829}
 --- !u!1 &597330533
 GameObject:
   m_ObjectHideFlags: 0
@@ -83340,6 +83472,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1693921461}
+  - component: {fileID: 1693921462}
   m_Layer: 0
   m_Name: Level
   m_TagString: Untagged
@@ -83364,6 +83497,19 @@ Transform:
   - {fileID: 1646609052}
   m_Father: {fileID: 236863039}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1693921462
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1693921460}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e1ceaf80e1d81142b765e906b02b7b2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inputField: {fileID: 1913370290}
 --- !u!1 &1695720779
 GameObject:
   m_ObjectHideFlags: 0
@@ -94593,9 +94739,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 942031130}
-        m_TargetAssemblyTypeName: Enemy, Assembly-CSharp
-        m_MethodName: SetEnemyActionList
+      - m_Target: {fileID: 555719412}
+        m_TargetAssemblyTypeName: Spells, Assembly-CSharp
+        m_MethodName: SetSpell
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -94605,19 +94751,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-      - m_Target: {fileID: 942031130}
-        m_TargetAssemblyTypeName: Enemy, Assembly-CSharp
-        m_MethodName: CreateEnemyButton
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 1183021142}
+      - m_Target: {fileID: 84635749}
         m_TargetAssemblyTypeName: UnityEngine.UI.Selectable, UnityEngine.UI
         m_MethodName: set_interactable
         m_Mode: 6
@@ -102191,4 +102325,5 @@ SceneRoots:
   - {fileID: 1542278001}
   - {fileID: 476093933}
   - {fileID: 942031131}
+  - {fileID: 555719413}
   - {fileID: 414249999}

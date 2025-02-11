@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 2947905872850218942}
   - component: {fileID: 7938905158954222767}
   m_Layer: 0
-  m_Name: Button
+  m_Name: BattleCreateButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -37,7 +37,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 74.16797, y: 0}
-  m_SizeDelta: {x: 308.3358, y: 30}
+  m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8586944008988391516
 CanvasRenderer:
@@ -210,7 +210,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Button
+  m_text: Create
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 7bbe748532300c44081025ab969536d4, type: 2}
   m_sharedMaterial: {fileID: 2529226689695053552, guid: 7bbe748532300c44081025ab969536d4, type: 2}
