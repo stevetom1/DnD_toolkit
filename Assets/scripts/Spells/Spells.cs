@@ -46,6 +46,8 @@ public class Spells : MonoBehaviour
 
     public void SetSpell()
     {
+        DatabaseManager databaseManager = GameObject.Find("DatabaseManager")?.GetComponent<DatabaseManager>();
+
         Spells spells = new Spells();
         spells.spellName = spellNameInputField.text;
         spells.spellLevel = int.Parse(spellLevelInputField.text);
@@ -63,6 +65,8 @@ public class Spells : MonoBehaviour
         spells.spellSavingThrow = (Ability)spellSavingThrowDropdown.value;
         spells.spellSuccessfulThrow = (SpellSuccessfulThrow)spellSuccessfulThrowDropdown.value;
         spells.spellClasses = spellClassesText.characterClass;
+
+        databaseManager.SaveSpell(spells);
     }
 }
 
