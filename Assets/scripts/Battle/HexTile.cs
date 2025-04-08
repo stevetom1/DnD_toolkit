@@ -5,13 +5,17 @@ public class HexTile : MonoBehaviour
 {
     public Color highlightColor = Color.yellow;
     private Button button;
-    private GameObject moveButton, attackButton, defendButton;
+    public GameObject addPlayerButton, addEnemyButton, moveButton;
+    public GameObject buttonPanel;
     private bool buttonsVisible = false;
     private float buttonSpacing = 10f;
 
-    public void SetupHexTile(GameObject movePrefab, GameObject attackPrefab, GameObject defendPrefab)
+    public int corX;
+    public int corY;
+
+    public void SetupHexTile(GameObject addPlayerPrefab, GameObject addEnemyPrefab, GameObject movePrefab)
     {
-        if (movePrefab == null || attackPrefab == null || defendPrefab == null)
+        if (movePrefab == null || addPlayerPrefab == null || addEnemyPrefab == null)
         {
             Debug.LogError("One or more button prefabs are not assigned in HexTile.");
             return;
@@ -23,17 +27,17 @@ public class HexTile : MonoBehaviour
             image.color = Color.white;
         }
 
+        addPlayerButton = Instantiate(addPlayerPrefab, transform.parent.parent);
+        addEnemyButton = Instantiate(addEnemyPrefab, transform.parent.parent);
         moveButton = Instantiate(movePrefab, transform.parent.parent);
-        attackButton = Instantiate(attackPrefab, transform.parent.parent);
-        defendButton = Instantiate(defendPrefab, transform.parent.parent);
 
+        addPlayerButton.SetActive(false);
+        addEnemyButton.SetActive(false);
         moveButton.SetActive(false);
-        attackButton.SetActive(false);
-        defendButton.SetActive(false);
 
+        addPlayerButton.GetComponent<Button>().onClick.AddListener(() => AddPlayerAction());
+        addEnemyButton.GetComponent<Button>().onClick.AddListener(() => AddEnemyAction());
         moveButton.GetComponent<Button>().onClick.AddListener(() => MoveAction());
-        attackButton.GetComponent<Button>().onClick.AddListener(() => AttackAction());
-        defendButton.GetComponent<Button>().onClick.AddListener(() => DefendAction());
     }
 
     void Start()
@@ -69,6 +73,13 @@ public class HexTile : MonoBehaviour
             }
         }
     }
+    void HideActionButtons()
+    {
+        moveButton.SetActive(false);
+        addPlayerButton.SetActive(false);
+        addEnemyButton.SetActive(false);
+        buttonsVisible = false;
+    }
 
     void ShowActionButtons()
     {
@@ -76,44 +87,36 @@ public class HexTile : MonoBehaviour
 
         Vector2 position = GetComponent<RectTransform>().anchoredPosition;
 
-        float offsetX = 150f;
+        float offsetX = 5f;
         float offsetY = 40f;
 
         moveButton.SetActive(true);
-        attackButton.SetActive(true);
-        defendButton.SetActive(true);
+        addPlayerButton.SetActive(true);
+        addEnemyButton.SetActive(true);
 
         moveButton.transform.SetAsLastSibling();
-        attackButton.transform.SetAsLastSibling();
-        defendButton.transform.SetAsLastSibling();
+        addPlayerButton.transform.SetAsLastSibling();
+        addEnemyButton.transform.SetAsLastSibling();
 
         moveButton.GetComponent<RectTransform>().anchoredPosition = position + new Vector2(offsetX, offsetY);
-        attackButton.GetComponent<RectTransform>().anchoredPosition = position + new Vector2(offsetX, offsetY - (buttonSpacing + 40f));
-        defendButton.GetComponent<RectTransform>().anchoredPosition = position + new Vector2(offsetX, offsetY - 2 * (buttonSpacing + 40f));
+        addPlayerButton.GetComponent<RectTransform>().anchoredPosition = position + new Vector2(offsetX, offsetY - (buttonSpacing + 40f));
+        addEnemyButton.GetComponent<RectTransform>().anchoredPosition = position + new Vector2(offsetX, offsetY - 2 * (buttonSpacing + 40f));
 
         buttonsVisible = true;
     }
 
-    void HideActionButtons()
+    void AddPlayerAction()
     {
-        moveButton.SetActive(false);
-        attackButton.SetActive(false);
-        defendButton.SetActive(false);
-        buttonsVisible = false;
+        Debug.Log("Add player!");
+    }
+
+    void AddEnemyAction()
+    {
+        Debug.Log("Add enemyy!");
     }
 
     void MoveAction()
     {
-        Debug.Log("Move action triggered!");
-    }
-
-    void AttackAction()
-    {
-        Debug.Log("Attack action triggered!");
-    }
-
-    void DefendAction()
-    {
-        Debug.Log("Defend action triggered!");
+        Debug.Log("Move!");
     }
 }

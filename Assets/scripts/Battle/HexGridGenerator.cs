@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 using UnityEngine.UI;
 
 public class HexGridGenerator : MonoBehaviour
@@ -15,6 +16,9 @@ public class HexGridGenerator : MonoBehaviour
 
     private float hexWidth;
     private float hexHeight;
+
+    [SerializeField] private int corX;
+    [SerializeField] private int corY;
 
     void Start()
     {
@@ -38,10 +42,14 @@ public class HexGridGenerator : MonoBehaviour
         {
             for (int y = 0; y < gridHeight; y++)
             {
+
                 Vector2 position = CalculateHexPosition(x, y);
                 position.x -= gridWidthOffset;
                 position.y += gridHeightOffset;
                 GameObject hex = Instantiate(hexPrefab, panel);
+                HexTile hexTileScript = hex.GetComponent<HexTile>();
+                hexTileScript.corX = x;
+                hexTileScript.corY = y;
                 hex.GetComponent<RectTransform>().anchoredPosition = position;
 
                 HexTile hexTile = hex.AddComponent<HexTile>();
