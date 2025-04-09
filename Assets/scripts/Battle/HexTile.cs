@@ -5,80 +5,121 @@ public class HexTile : MonoBehaviour
 {
     public Color highlightColor = Color.yellow;
     private Button button;
-    public GameObject addPlayerButton, addEnemyButton, moveButton;
-    public GameObject buttonPanel;
-    private bool buttonsVisible = false;
+    private static GameObject addPlayerButton, addEnemyButton, moveButton; // Shared buttons
+    private static GameObject buttonPanel;
+    private static bool buttonsVisible = false;
     private float buttonSpacing = 10f;
+
+    private static HexTile currentlySelectedHex = null;
+
+    public GameObject addPlayerPrefab, addEnemyPrefab, movePrefab;
 
     public int corX;
     public int corY;
 
     public void SetupHexTile(GameObject addPlayerPrefab, GameObject addEnemyPrefab, GameObject movePrefab)
     {
-        if (movePrefab == null || addPlayerPrefab == null || addEnemyPrefab == null)
-        {
-            Debug.LogError("One or more button prefabs are not assigned in HexTile.");
-            return;
-        }
-
-        if (GetComponent<Image>() == null)
-        {
-            Image image = gameObject.AddComponent<Image>();
-            image.color = Color.white;
-        }
-
-        addPlayerButton = Instantiate(addPlayerPrefab, transform.parent.parent);
-        addEnemyButton = Instantiate(addEnemyPrefab, transform.parent.parent);
-        moveButton = Instantiate(movePrefab, transform.parent.parent);
-
-        addPlayerButton.SetActive(false);
-        addEnemyButton.SetActive(false);
-        moveButton.SetActive(false);
-
-        addPlayerButton.GetComponent<Button>().onClick.AddListener(() => AddPlayerAction());
-        addEnemyButton.GetComponent<Button>().onClick.AddListener(() => AddEnemyAction());
-        moveButton.GetComponent<Button>().onClick.AddListener(() => MoveAction());
+        this.addPlayerPrefab = addPlayerPrefab;
+        this.addEnemyPrefab = addEnemyPrefab;
+        this.movePrefab = movePrefab;
     }
 
     void Start()
     {
         button = GetComponent<Button>();
         button.onClick.AddListener(OnHexClick);
+
+        if (buttonPanel == null)
+            CreateButtonPanel();
+
+        if (addPlayerButton == null || addEnemyButton == null || moveButton == null)
+            CreateActionButtons();
+    }
+
+    void CreateButtonPanel()
+    {
+        Canvas canvas = FindObjectOfType<Canvas>();
+        if (canvas == null)
+        {
+            GameObject canvasObj = new GameObject("Canvas");
+            canvas = canvasObj.AddComponent<Canvas>();
+            canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+            canvasObj.AddComponent<CanvasScaler>();
+            canvasObj.AddComponent<GraphicRaycaster>();
+        }
+
+        buttonPanel = new GameObject("ButtonPanel");
+        buttonPanel.transform.SetParent(canvas.transform, false);
+
+        RectTransform rectTransform = buttonPanel.AddComponent<RectTransform>();
+        rectTransform.sizeDelta = new Vector2(1000, 800);
+        rectTransform.anchorMin = new Vector2(0.5f, 0.5f);
+        rectTransform.anchorMax = new Vector2(0.5f, 0.5f);
+        rectTransform.pivot = new Vector2(0.5f, 0.5f);
+        rectTransform.anchoredPosition = Vector2.zero;
+
+        Image bgImage = buttonPanel.AddComponent<Image>();
+        bgImage.color = new Color(0f, 0f, 0f, 0.6f);
+
+        buttonPanel.SetActive(false);
+    }
+
+    void CreateActionButtons()
+    {
+        Transform parent = transform.parent.parent;
+
+        addPlayerButton = Instantiate(addPlayerPrefab, parent);
+        addEnemyButton = Instantiate(addEnemyPrefab, parent);
+        moveButton = Instantiate(movePrefab, parent);
+
+        addPlayerButton.SetActive(false);
+        addEnemyButton.SetActive(false);
+        moveButton.SetActive(false);
+
+        addPlayerButton.GetComponent<Button>().onClick.RemoveAllListeners();
+        addEnemyButton.GetComponent<Button>().onClick.RemoveAllListeners();
+        moveButton.GetComponent<Button>().onClick.RemoveAllListeners();
+
+        addPlayerButton.GetComponent<Button>().onClick.AddListener(() => AddPlayerAction());
+        addEnemyButton.GetComponent<Button>().onClick.AddListener(() => AddEnemyAction());
+        moveButton.GetComponent<Button>().onClick.AddListener(() => MoveAction());
     }
 
     void OnHexClick()
     {
-        ResetOtherHexes();
+        if (buttonPanel != null)
+            buttonPanel.SetActive(false);
 
-        if (buttonsVisible)
+        if (currentlySelectedHex != null && currentlySelectedHex != this)
+        {
+            currentlySelectedHex.ResetColor();
+        }
+
+        HideActionButtonsFromAll();
+
+        if (buttonsVisible && currentlySelectedHex == this)
         {
             HideActionButtons();
+            currentlySelectedHex = null;
         }
         else
         {
             ShowActionButtons();
+            currentlySelectedHex = this;
         }
     }
 
-    void ResetOtherHexes()
+    static void HideActionButtonsFromAll()
     {
-        foreach (Transform sibling in transform.parent)
-        {
-            var hexTile = sibling.GetComponent<HexTile>();
-            if (hexTile != null)
-            {
-                var image = sibling.GetComponent<Image>();
-                image.color = Color.white;
-                hexTile.HideActionButtons();
-            }
-        }
+        if (addPlayerButton != null) addPlayerButton.SetActive(false);
+        if (addEnemyButton != null) addEnemyButton.SetActive(false);
+        if (moveButton != null) moveButton.SetActive(false);
+        buttonsVisible = false;
     }
+
     void HideActionButtons()
     {
-        moveButton.SetActive(false);
-        addPlayerButton.SetActive(false);
-        addEnemyButton.SetActive(false);
-        buttonsVisible = false;
+        HideActionButtonsFromAll();
     }
 
     void ShowActionButtons()
@@ -86,13 +127,12 @@ public class HexTile : MonoBehaviour
         GetComponent<Image>().color = highlightColor;
 
         Vector2 position = GetComponent<RectTransform>().anchoredPosition;
-
         float offsetX = 5f;
         float offsetY = 40f;
 
-        moveButton.SetActive(true);
         addPlayerButton.SetActive(true);
         addEnemyButton.SetActive(true);
+        moveButton.SetActive(true);
 
         moveButton.transform.SetAsLastSibling();
         addPlayerButton.transform.SetAsLastSibling();
@@ -105,9 +145,18 @@ public class HexTile : MonoBehaviour
         buttonsVisible = true;
     }
 
+    void ResetColor()
+    {
+        GetComponent<Image>().color = Color.white;
+    }
+
     void AddPlayerAction()
     {
         Debug.Log("Add player!");
+        if (buttonPanel != null)
+            buttonPanel.SetActive(true);
+
+        HideActionButtonsFromAll();
     }
 
     void AddEnemyAction()

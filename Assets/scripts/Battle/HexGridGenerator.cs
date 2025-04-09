@@ -6,9 +6,7 @@ public class HexGridGenerator : MonoBehaviour
 {
     public GameObject hexPrefab;
     public RectTransform panel;
-    public GameObject moveButtonPrefab;
-    public GameObject attackButtonPrefab;
-    public GameObject defendButtonPrefab;
+    public GameObject addPlayerButtonPrefab, addEnemyButtonPrefab, moveButtonPrefab;
     public int gridWidth = 5;
     public int gridHeight = 5;
     public float hexSize = 50f;
@@ -22,7 +20,7 @@ public class HexGridGenerator : MonoBehaviour
 
     void Start()
     {
-        if (moveButtonPrefab == null || attackButtonPrefab == null || defendButtonPrefab == null)
+        if (moveButtonPrefab == null || addPlayerButtonPrefab == null || addEnemyButtonPrefab == null)
         {
             Debug.LogError("One or more button prefabs are not assigned in HexGridGenerator.");
             return;
@@ -53,7 +51,7 @@ public class HexGridGenerator : MonoBehaviour
                 hex.GetComponent<RectTransform>().anchoredPosition = position;
 
                 HexTile hexTile = hex.AddComponent<HexTile>();
-                hexTile.SetupHexTile(moveButtonPrefab, attackButtonPrefab, defendButtonPrefab);
+                hexTile.SetupHexTile(addPlayerButtonPrefab, addEnemyButtonPrefab, moveButtonPrefab);
             }
         }
     }
