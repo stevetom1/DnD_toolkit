@@ -1,11 +1,15 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
+using System.IO;
 
 public class HexTile : MonoBehaviour
 {
     public Color highlightColor = Color.yellow;
     private Button button;
-    private static GameObject addPlayerButton, addEnemyButton, moveButton; // Shared buttons
+    private static GameObject addPlayerButton, addEnemyButton, moveButton;
     private static GameObject buttonPanel;
     private static bool buttonsVisible = false;
     private float buttonSpacing = 10f;
@@ -17,6 +21,9 @@ public class HexTile : MonoBehaviour
     public int corX;
     public int corY;
 
+    private string saveDirectory;
+    private GameObject buttonPrefab;
+
     public void SetupHexTile(GameObject addPlayerPrefab, GameObject addEnemyPrefab, GameObject movePrefab)
     {
         this.addPlayerPrefab = addPlayerPrefab;
@@ -26,6 +33,8 @@ public class HexTile : MonoBehaviour
 
     void Start()
     {
+        saveDirectory = Application.persistentDataPath;
+
         button = GetComponent<Button>();
         button.onClick.AddListener(OnHexClick);
 
@@ -34,6 +43,12 @@ public class HexTile : MonoBehaviour
 
         if (addPlayerButton == null || addEnemyButton == null || moveButton == null)
             CreateActionButtons();
+
+        buttonPrefab = Resources.Load<GameObject>("CharacterButton");
+        if (buttonPrefab == null)
+        {
+            Debug.LogError("CharacterButton prefab not found in Resources folder");
+        }
     }
 
     void CreateButtonPanel()
@@ -52,7 +67,7 @@ public class HexTile : MonoBehaviour
         buttonPanel.transform.SetParent(canvas.transform, false);
 
         RectTransform rectTransform = buttonPanel.AddComponent<RectTransform>();
-        rectTransform.sizeDelta = new Vector2(1000, 800);
+        rectTransform.sizeDelta = new Vector2(500, 1600);
         rectTransform.anchorMin = new Vector2(0.5f, 0.5f);
         rectTransform.anchorMax = new Vector2(0.5f, 0.5f);
         rectTransform.pivot = new Vector2(0.5f, 0.5f);
@@ -60,6 +75,15 @@ public class HexTile : MonoBehaviour
 
         Image bgImage = buttonPanel.AddComponent<Image>();
         bgImage.color = new Color(0f, 0f, 0f, 0.6f);
+
+        VerticalLayoutGroup layoutGroup = buttonPanel.AddComponent<VerticalLayoutGroup>();
+        layoutGroup.childForceExpandHeight = false;
+        layoutGroup.childForceExpandWidth = true;
+        layoutGroup.childAlignment = TextAnchor.UpperCenter;
+        layoutGroup.spacing = 10f;
+
+        ContentSizeFitter fitter = buttonPanel.AddComponent<ContentSizeFitter>();
+        fitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
 
         buttonPanel.SetActive(false);
     }
@@ -154,7 +178,10 @@ public class HexTile : MonoBehaviour
     {
         Debug.Log("Add player!");
         if (buttonPanel != null)
+        {
+            GenerateCharacterButtons();
             buttonPanel.SetActive(true);
+        }
 
         HideActionButtonsFromAll();
     }
@@ -167,5 +194,68 @@ public class HexTile : MonoBehaviour
     void MoveAction()
     {
         Debug.Log("Move!");
+    }
+
+    private void GenerateCharacterButtons()
+    {
+        foreach (Transform child in buttonPanel.transform)
+        {
+            Destroy(child.gameObject);
+        }
+
+        string[] files = Directory.GetFiles(saveDirectory, "*.json");
+
+        foreach (string filePath in files)
+        {
+            string fileName = Path.GetFileNameWithoutExtension(filePath);
+
+            GameObject newButton = Instantiate(buttonPrefab, buttonPanel.transform);
+
+            var buttonText = newButton.GetComponentInChildren<Text>();
+            var buttonTMP = newButton.GetComponentInChildren<TextMeshProUGUI>();
+            if (buttonText != null)
+            {
+                buttonText.text = fileName;
+            }
+            else if (buttonTMP != null)
+            {
+                buttonTMP.text = fileName;
+            }
+            else
+            {
+                Debug.LogWarning("Button missing Text/TextMeshProUGUI");
+            }
+
+            var buttonComponent = newButton.GetComponent<Button>();
+            if (buttonComponent != null)
+            {
+                buttonComponent.onClick.AddListener(() => OnCharacterSelected(filePath));
+            }
+        }
+    }
+
+    private void OnCharacterSelected(string filePath)
+    {
+        if (File.Exists(filePath))
+        {
+            string json = File.ReadAllText(filePath);
+            Player player = GameObject.Find("Character")?.GetComponent<Player>();
+
+            if (player != null)
+            {
+                JsonUtility.FromJsonOverwrite(json, player);
+                Debug.Log($"[HexTile] Loaded character from: {filePath}");
+            }
+            else
+            {
+                Debug.LogError("Player component not found on GameObject 'Character'");
+            }
+        }
+        else
+        {
+            Debug.LogError($"[HexTile] File not found: {filePath}");
+        }
+
+        buttonPanel.SetActive(false);
     }
 }
