@@ -1,8 +1,9 @@
-using System.Collections.Generic;
-using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 using TMPro;
+using System.Collections.Generic;
+using System.IO;
 
 public class HexTile : MonoBehaviour
 {
@@ -10,38 +11,43 @@ public class HexTile : MonoBehaviour
     private Button button;
     private static GameObject addPlayerButton, addEnemyButton, moveButton;
     private static GameObject buttonPanel;
-    private static RectTransform buttonContainer;
+    private static Transform buttonContainer;
     private static bool buttonsVisible = false;
+    private float buttonSpacing = 10f;
 
     private static HexTile currentlySelectedHex = null;
-    private static HexTile hexWaitingForCharacter = null;
 
-    public GameObject addPlayerPrefab, addEnemyPrefab, movePrefab;
+    public GameObject characterInstanceOnThisTile;
+    private string saveDirectory;
+    private static GameObject buttonPrefab;
+
     public int corX;
     public int corY;
 
-    private string saveDirectory;
-    private GameObject characterInstanceOnThisTile;
-
-    void Start()
-    {
-        saveDirectory = Application.persistentDataPath;
-
-        button = GetComponent<Button>();
-        button.onClick.AddListener(OnHexClick);
-
-        if (buttonPanel == null)
-            CreateButtonPanel();
-
-        if (addPlayerButton == null || addEnemyButton == null || moveButton == null)
-            CreateActionButtons();
-    }
+    public GameObject addPlayerPrefab, addEnemyPrefab, movePrefab;
 
     public void SetupHexTile(GameObject addPlayerPrefab, GameObject addEnemyPrefab, GameObject movePrefab)
     {
         this.addPlayerPrefab = addPlayerPrefab;
         this.addEnemyPrefab = addEnemyPrefab;
         this.movePrefab = movePrefab;
+    }
+
+    void Start()
+    {
+        button = GetComponent<Button>();
+        button.onClick.AddListener(OnHexClick);
+
+        saveDirectory = Application.persistentDataPath;
+
+        if (buttonPanel == null)
+            CreateButtonPanel();
+
+        if (addPlayerButton == null || addEnemyButton == null || moveButton == null)
+            CreateActionButtons();
+
+        if (buttonPrefab == null)
+            buttonPrefab = Resources.Load<GameObject>("CharacterButton");
     }
 
     void CreateButtonPanel()
@@ -60,7 +66,7 @@ public class HexTile : MonoBehaviour
         buttonPanel.transform.SetParent(canvas.transform, false);
 
         RectTransform rectTransform = buttonPanel.AddComponent<RectTransform>();
-        rectTransform.sizeDelta = new Vector2(300, 400);
+        rectTransform.sizeDelta = new Vector2(300, 500);
         rectTransform.anchorMin = new Vector2(0.5f, 0.5f);
         rectTransform.anchorMax = new Vector2(0.5f, 0.5f);
         rectTransform.pivot = new Vector2(0.5f, 0.5f);
@@ -69,33 +75,15 @@ public class HexTile : MonoBehaviour
         Image bgImage = buttonPanel.AddComponent<Image>();
         bgImage.color = new Color(0f, 0f, 0f, 0.6f);
 
-        // Scroll view for vertical buttons
-        GameObject scrollObj = new GameObject("ScrollView");
-        scrollObj.transform.SetParent(buttonPanel.transform, false);
-        ScrollRect scrollRect = scrollObj.AddComponent<ScrollRect>();
-        RectTransform scrollRT = scrollObj.GetComponent<RectTransform>();
-        scrollRT.sizeDelta = new Vector2(280, 380);
-        scrollRT.anchorMin = new Vector2(0.5f, 0.5f);
-        scrollRT.anchorMax = new Vector2(0.5f, 0.5f);
-        scrollRT.pivot = new Vector2(0.5f, 0.5f);
-        scrollRT.anchoredPosition = Vector2.zero;
+        VerticalLayoutGroup layout = buttonPanel.AddComponent<VerticalLayoutGroup>();
+        layout.childAlignment = TextAnchor.UpperCenter;
+        layout.spacing = 10f;
+        layout.padding = new RectOffset(10, 10, 10, 10);
 
-        GameObject containerObj = new GameObject("ButtonContainer");
-        containerObj.transform.SetParent(scrollObj.transform, false);
-        buttonContainer = containerObj.AddComponent<RectTransform>();
-        VerticalLayoutGroup layout = containerObj.AddComponent<VerticalLayoutGroup>();
-        layout.childControlHeight = true;
-        layout.childControlWidth = true;
-        layout.childForceExpandHeight = false;
-        layout.childForceExpandWidth = true;
-        layout.spacing = 5f;
-
-        ContentSizeFitter fitter = containerObj.AddComponent<ContentSizeFitter>();
+        ContentSizeFitter fitter = buttonPanel.AddComponent<ContentSizeFitter>();
         fitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
 
-        scrollRect.content = buttonContainer;
-        scrollRect.vertical = true;
-
+        buttonContainer = buttonPanel.transform;
         buttonPanel.SetActive(false);
     }
 
@@ -172,8 +160,8 @@ public class HexTile : MonoBehaviour
         addEnemyButton.transform.SetAsLastSibling();
 
         moveButton.GetComponent<RectTransform>().anchoredPosition = position + new Vector2(offsetX, offsetY);
-        addPlayerButton.GetComponent<RectTransform>().anchoredPosition = position + new Vector2(offsetX, offsetY - 50f);
-        addEnemyButton.GetComponent<RectTransform>().anchoredPosition = position + new Vector2(offsetX, offsetY - 100f);
+        addPlayerButton.GetComponent<RectTransform>().anchoredPosition = position + new Vector2(offsetX, offsetY - (buttonSpacing + 40f));
+        addEnemyButton.GetComponent<RectTransform>().anchoredPosition = position + new Vector2(offsetX, offsetY - 2 * (buttonSpacing + 40f));
 
         buttonsVisible = true;
     }
@@ -185,9 +173,13 @@ public class HexTile : MonoBehaviour
 
     void AddPlayerAction()
     {
-        hexWaitingForCharacter = this;
-        GenerateCharacterButtons();
-        buttonPanel.SetActive(true);
+        Debug.Log("Add player!");
+        if (buttonPanel != null)
+        {
+            GenerateCharacterButtons();
+            buttonPanel.SetActive(true);
+        }
+
         HideActionButtonsFromAll();
     }
 
@@ -204,9 +196,7 @@ public class HexTile : MonoBehaviour
     void GenerateCharacterButtons()
     {
         foreach (Transform child in buttonContainer)
-        {
             Destroy(child.gameObject);
-        }
 
         string[] files = Directory.GetFiles(saveDirectory, "*.json");
 
@@ -214,38 +204,20 @@ public class HexTile : MonoBehaviour
         {
             string fileName = Path.GetFileNameWithoutExtension(filePath);
 
-            GameObject buttonObj = CreateUIButton(fileName, filePath);
-            buttonObj.transform.SetParent(buttonContainer, false);
+            GameObject newButton = Instantiate(buttonPrefab, buttonContainer);
+
+            var text = newButton.GetComponentInChildren<Text>();
+            var tmp = newButton.GetComponentInChildren<TextMeshProUGUI>();
+
+            if (text != null)
+                text.text = fileName;
+            else if (tmp != null)
+                tmp.text = fileName;
+
+            Button btn = newButton.GetComponent<Button>();
+            if (btn != null)
+                btn.onClick.AddListener(() => OnCharacterSelected(filePath));
         }
-    }
-
-    GameObject CreateUIButton(string label, string filePath)
-    {
-        GameObject buttonObj = new GameObject(label);
-        buttonObj.AddComponent<CanvasRenderer>();
-        Button btn = buttonObj.AddComponent<Button>();
-        Image img = buttonObj.AddComponent<Image>();
-        img.color = new Color(1f, 1f, 1f, 0.8f);
-
-        GameObject textObj = new GameObject("Text");
-        textObj.transform.SetParent(buttonObj.transform, false);
-        TextMeshProUGUI tmp = textObj.AddComponent<TextMeshProUGUI>();
-        tmp.text = label;
-        tmp.alignment = TextAlignmentOptions.Center;
-        tmp.fontSize = 24;
-
-        RectTransform rt = buttonObj.GetComponent<RectTransform>();
-        rt.sizeDelta = new Vector2(260, 40);
-
-        RectTransform textRT = textObj.GetComponent<RectTransform>();
-        textRT.anchorMin = Vector2.zero;
-        textRT.anchorMax = Vector2.one;
-        textRT.offsetMin = Vector2.zero;
-        textRT.offsetMax = Vector2.zero;
-
-        btn.onClick.AddListener(() => OnCharacterSelected(filePath));
-
-        return buttonObj;
     }
 
     void OnCharacterSelected(string filePath)
@@ -256,68 +228,31 @@ public class HexTile : MonoBehaviour
             return;
         }
 
-        if (hexWaitingForCharacter == null)
-        {
-            Debug.LogError("No hex selected for character placement!");
-            return;
-        }
-
         string json = File.ReadAllText(filePath);
-        CharacterData data = JsonUtility.FromJson<CharacterData>(json);
-
         GameObject prefab = Resources.Load<GameObject>("CharacterPrefab");
+
         if (prefab == null)
         {
-            Debug.LogError("CharacterPrefab not found in Resources!");
+            Debug.LogError("CharacterPrefab not found in Resources folder!");
             return;
         }
 
-        if (hexWaitingForCharacter.characterInstanceOnThisTile != null)
-            Destroy(hexWaitingForCharacter.characterInstanceOnThisTile);
+        if (characterInstanceOnThisTile != null)
+            Destroy(characterInstanceOnThisTile);
 
-        GameObject instance = Instantiate(
-            prefab,
-            hexWaitingForCharacter.transform.position,
-            Quaternion.identity,
-            hexWaitingForCharacter.transform
-        );
+        characterInstanceOnThisTile = Instantiate(prefab, transform.position, Quaternion.identity, transform);
 
-        Player player = instance.GetComponent<Player>();
+        Player player = characterInstanceOnThisTile.GetComponent<Player>();
         if (player != null)
         {
             JsonUtility.FromJsonOverwrite(json, player);
-            Debug.Log($"[HexTile] Loaded character: {data.name}");
+            Debug.Log($"[HexTile] Loaded character from: {filePath} onto tile ({corX}, {corY})");
         }
         else
         {
-            Debug.LogError("Player component not found on instantiated character!");
+            Debug.LogError("Player component not found on character prefab!");
         }
 
-        hexWaitingForCharacter.characterInstanceOnThisTile = instance;
         buttonPanel.SetActive(false);
     }
-
-    [System.Serializable]
-    public class CharacterData
-    {
-        public string name;
-        public int level;
-        public int health;
-        public int maxHealth;
-        public int mana;
-        public int maxMana;
-        public int strength;
-        public int agility;
-        public int intelligence;
-        public int defense;
-        public int speed;
-
-        public string characterClass;
-        public string race;
-        public string weapon;
-        public string armor;
-
-        public List<string> abilities;
-    }
-
 }
