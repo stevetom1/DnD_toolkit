@@ -59,6 +59,9 @@ public class Player : MonoBehaviour
     public List<SOItems> inventory;
     public InventoryManager inventoryManager;
 
+    public int hexY;
+    public int hexX;
+
     public void SaveToFile()
     {
         remainingHp = hp;

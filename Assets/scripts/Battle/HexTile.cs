@@ -89,7 +89,7 @@ public class HexTile : MonoBehaviour
 
     void CreateActionButtons()
     {
-        Transform parent = transform.parent.parent;
+        Transform parent = transform.parent?.parent ?? transform.parent;
 
         addPlayerButton = Instantiate(addPlayerPrefab, parent);
         addEnemyButton = Instantiate(addEnemyPrefab, parent);
@@ -203,7 +203,6 @@ public class HexTile : MonoBehaviour
         foreach (string filePath in files)
         {
             string fileName = Path.GetFileNameWithoutExtension(filePath);
-
             GameObject newButton = Instantiate(buttonPrefab, buttonContainer);
 
             var text = newButton.GetComponentInChildren<Text>();
@@ -222,6 +221,12 @@ public class HexTile : MonoBehaviour
 
     void OnCharacterSelected(string filePath)
     {
+        if (currentlySelectedHex == null)
+        {
+            Debug.LogError("No hex tile selected.");
+            return;
+        }
+
         if (!File.Exists(filePath))
         {
             Debug.LogError($"[HexTile] File not found: {filePath}");
@@ -237,16 +242,19 @@ public class HexTile : MonoBehaviour
             return;
         }
 
-        if (characterInstanceOnThisTile != null)
-            Destroy(characterInstanceOnThisTile);
+        if (currentlySelectedHex.characterInstanceOnThisTile != null)
+            Destroy(currentlySelectedHex.characterInstanceOnThisTile);
 
-        characterInstanceOnThisTile = Instantiate(prefab, transform.position, Quaternion.identity, transform);
+        currentlySelectedHex.characterInstanceOnThisTile = Instantiate(prefab, currentlySelectedHex.transform);
+        currentlySelectedHex.characterInstanceOnThisTile.transform.localPosition = Vector3.zero;
 
-        Player player = characterInstanceOnThisTile.GetComponent<Player>();
+        Player player = currentlySelectedHex.characterInstanceOnThisTile.GetComponent<Player>();
         if (player != null)
         {
             JsonUtility.FromJsonOverwrite(json, player);
-            Debug.Log($"[HexTile] Loaded character from: {filePath} onto tile ({corX}, {corY})");
+            player.hexX = currentlySelectedHex.corX;
+            player.hexY = currentlySelectedHex.corY;
+            Debug.Log($"Character spawned on hex ({player.hexX}, {player.hexY})");
         }
         else
         {
