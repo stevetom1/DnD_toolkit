@@ -255,6 +255,26 @@ public class HexTile : MonoBehaviour
             player.hexX = currentlySelectedHex.corX;
             player.hexY = currentlySelectedHex.corY;
             Debug.Log($"Character spawned on hex ({player.hexX}, {player.hexY})");
+
+            Transform visualGO = currentlySelectedHex.transform.Find("GameObject");
+            if (visualGO != null)
+            {
+                visualGO.gameObject.SetActive(true);
+
+                TextMeshProUGUI nameText = visualGO.GetComponentInChildren<TextMeshProUGUI>();
+                if (nameText != null)
+                {
+                    nameText.text = player.name;
+                }
+                else
+                {
+                    Debug.LogWarning("TextMeshProUGUI not found inside the GameObject.");
+                }
+            }
+            else
+            {
+                Debug.LogWarning("Child GameObject not found on hex tile.");
+            }
         }
         else
         {
