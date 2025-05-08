@@ -26,6 +26,12 @@ public class HexTile : MonoBehaviour
 
     public GameObject addPlayerPrefab, addEnemyPrefab, movePrefab;
 
+    public Enemy enemyOnTile;
+    public GameObject enemyObject;
+    public bool hasEnemy = false;
+
+    private EnemyButtonManager enemyButtonManager;
+
     public void SetupHexTile(GameObject addPlayerPrefab, GameObject addEnemyPrefab, GameObject movePrefab)
     {
         this.addPlayerPrefab = addPlayerPrefab;
@@ -186,6 +192,22 @@ public class HexTile : MonoBehaviour
     void AddEnemyAction()
     {
         Debug.Log("Add enemy!");
+
+        if (EnemyButtonManager.Instance == null)
+        {
+            Debug.LogError("EnemyButtonManager instance not found!");
+            return;
+        }
+
+        EnemyButtonManager.Instance.ShowEnemySelection(this, buttonContainer, buttonPanel);
+        HideActionButtonsFromAll();
+    }
+
+    public void SetEnemy(Enemy enemy, GameObject enemyObj)
+    {
+        this.enemyOnTile = enemy;
+        this.enemyObject = enemyObj;
+        this.hasEnemy = true;
     }
 
     void MoveAction()

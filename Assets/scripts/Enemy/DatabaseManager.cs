@@ -9,6 +9,7 @@ using Unity.VisualScripting;
 using UnityEditor.MemoryProfiler;
 using System;
 using System.Linq;
+using UnityEngine.UIElements;
 
 public class DatabaseManager : MonoBehaviour
 {
@@ -109,6 +110,94 @@ public class DatabaseManager : MonoBehaviour
         }*/
     }
 
+    public List<Enemy> GetAllEnemies()
+    {
+        if (db == null)
+        {
+            Debug.LogError("Database connection is not initialized.");
+            return null;
+        }
+        try
+        {
+            var dbEnemies = db.Table<DbEnemy>().ToList();
+            List<Enemy> enemies = new List<Enemy>();
+
+            foreach (var dbEnemy in dbEnemies)
+            {
+                Enemy enemy = new Enemy();
+                enemy.Id = dbEnemy.Id;
+                enemy.EnemyName = dbEnemy.EnemyName;
+                enemy.MaxHp = dbEnemy.MaxHp;
+                enemy.Defense = dbEnemy.Defense;
+                enemy.Speed = dbEnemy.Speed;
+                enemy.EnemySize = StringToEnum<Size>(dbEnemy.EnemySize);
+                Debug.Log(enemy.EnemySize);
+                enemy.EnemyType = StringToEnum<Type>(dbEnemy.EnemyType);
+                Debug.Log(enemy.EnemyType);
+                enemy.Experience = dbEnemy.Experience;
+                enemy.NumberOfAttacks = dbEnemy.NumberOfAttacks;
+                enemy.Strength = dbEnemy.Strength;
+                enemy.Dexterity = dbEnemy.Dexterity;
+                enemy.Constitution = dbEnemy.Constitution;
+                enemy.Intelligence = dbEnemy.Intelligence;
+                enemy.Wisdom = dbEnemy.Wisdom;
+                enemy.Charisma = dbEnemy.Charisma;
+                enemy.BonusStrength = dbEnemy.BonusStrength;
+                enemy.BonusDexterity = dbEnemy.BonusDexterity;
+                enemy.BonusConstitution = dbEnemy.BonusConstitution;
+                enemy.BonusIntelligence = dbEnemy.BonusIntelligence;
+                enemy.BonusWisdom = dbEnemy.BonusWisdom;
+                enemy.BonusCharisma = dbEnemy.BonusCharisma;
+                enemy.STBonusStrength = dbEnemy.STBonusStrength;
+                enemy.STBonusDexterity = dbEnemy.STBonusDexterity;
+                enemy.STBonusConstitution = dbEnemy.STBonusConstitution;
+                enemy.STBonusIntelligence = dbEnemy.STBonusIntelligence;
+                enemy.STBonusWisdom = dbEnemy.STBonusWisdom;
+                enemy.STBonusCharisma = dbEnemy.STBonusCharisma;
+
+                if (!string.IsNullOrEmpty(dbEnemy.Weakneses))
+                {
+                    enemy.Weakneses = StringToList<DamageType>(dbEnemy.Weakneses);
+                }
+                if (!string.IsNullOrEmpty(dbEnemy.Vulnerability))
+                {
+                    enemy.Vulnerability = StringToList<DamageType>(dbEnemy.Vulnerability);
+                }
+                if (!string.IsNullOrEmpty(dbEnemy.Immunity))
+                {
+                    enemy.Immunity = StringToList<DamageType>(dbEnemy.Immunity);
+                }
+                if (!string.IsNullOrEmpty(dbEnemy.ImmunityAgaintsStatus))
+                {
+                    enemy.ImmunityAgaintsStatus = StringToList<StatusType>(dbEnemy.ImmunityAgaintsStatus);
+                }
+
+                enemy.EnemyAction = db.Table<DbEnemyAction>()
+                    .Where(a => a.EnemyId == dbEnemy.Id)
+                    .Select(a => new EnemyAction
+                    {
+                        ActionName = a.ActionName,
+                        Reach = a.Reach,
+                        Bonus = a.Bonus,
+                        DamageType = StringToEnum<DamageType>(a.DamageType),
+                        DamageCount = a.DamageCount,
+                        DamageDice = a.DamageDice,
+                        BonusDamage = a.BonusDamage
+                    })
+                    .ToList();
+
+                enemies.Add(enemy);
+            }
+
+            return enemies;
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"Failed to fetch enemies: {ex.Message}");
+            return null;
+        }
+    }
+    
     public List<Enemy> GetAllMonsters()
     {
         if (db == null)
