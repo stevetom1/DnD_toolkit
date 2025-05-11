@@ -198,29 +198,6 @@ public class DatabaseManager : MonoBehaviour
         }
     }
     
-    public List<Enemy> GetAllMonsters()
-    {
-        if (db == null)
-        {
-            Debug.LogError("Database connection is not initialized.");
-            return null;
-        }
-        try
-        {
-            var monsters = db.Table<Enemy>().ToList();
-            foreach (var monster in monsters)
-            {
-                monster.EnemyAction = db.Table<EnemyAction>()
-                    .Where(a => a.EnemyId == monster.Id).ToList();
-            }
-            return monsters;
-        }
-        catch (System.Exception ex)
-        {
-            Debug.LogError($"Failed to fetch monsters: {ex.Message}");
-            return null;
-        }
-    }
 
 
     public void SaveSpell(Spells spells)

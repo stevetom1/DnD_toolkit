@@ -556,7 +556,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee4887db3f9b2c547b03a6acf435be3a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buttonPrefab: {fileID: 0}
+  buttonPrefab: {fileID: 3438088030168733112, guid: 9c1ba4d9f95f6014bad9709a4c9b32da, type: 3}
   enemyPrefab: {fileID: 402290264}
 --- !u!4 &227901898
 Transform:
@@ -1170,6 +1170,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 402290265}
+  - component: {fileID: 402290266}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Untagged
@@ -1192,6 +1193,74 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &402290266
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 402290264}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fdd3a71224eba894e90964bc9ccd4171, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <EnemyName>k__BackingField: 
+  <MaxHp>k__BackingField: 0
+  <Defense>k__BackingField: 0
+  <Speed>k__BackingField: 0
+  <EnemySize>k__BackingField: 0
+  <EnemyType>k__BackingField: 0
+  <Experience>k__BackingField: 0
+  <NumberOfAttacks>k__BackingField: 0
+  <Strength>k__BackingField: 0
+  <Dexterity>k__BackingField: 0
+  <Constitution>k__BackingField: 0
+  <Intelligence>k__BackingField: 0
+  <Wisdom>k__BackingField: 0
+  <Charisma>k__BackingField: 0
+  <BonusStrength>k__BackingField: 0
+  <BonusDexterity>k__BackingField: 0
+  <BonusConstitution>k__BackingField: 0
+  <BonusIntelligence>k__BackingField: 0
+  <BonusWisdom>k__BackingField: 0
+  <BonusCharisma>k__BackingField: 0
+  <STBonusStrength>k__BackingField: 0
+  <STBonusDexterity>k__BackingField: 0
+  <STBonusConstitution>k__BackingField: 0
+  <STBonusIntelligence>k__BackingField: 0
+  <STBonusWisdom>k__BackingField: 0
+  <STBonusCharisma>k__BackingField: 0
+  <Weakneses>k__BackingField: 
+  <Vulnerability>k__BackingField: 
+  <Immunity>k__BackingField: 
+  <ImmunityAgaintsStatus>k__BackingField: 
+  <EnemyAction>k__BackingField: []
+  enemyNameText: {fileID: 0}
+  hpText: {fileID: 0}
+  defenseText: {fileID: 0}
+  speedText: {fileID: 0}
+  enemySizeText: {fileID: 0}
+  enemyTypeText: {fileID: 0}
+  experienceText: {fileID: 0}
+  numberOfAttacksText: {fileID: 0}
+  strengthText: {fileID: 0}
+  intelligenceText: {fileID: 0}
+  dexterityText: {fileID: 0}
+  wisdomText: {fileID: 0}
+  constitutionText: {fileID: 0}
+  charismaText: {fileID: 0}
+  STBonusStrengthText: {fileID: 0}
+  STBonusIntelligenceText: {fileID: 0}
+  STBonusDexterityText: {fileID: 0}
+  STBonusWisdomText: {fileID: 0}
+  STBonusConstitutionText: {fileID: 0}
+  STBonusCharismaText: {fileID: 0}
+  weaknesesDropdown: {fileID: 0}
+  vulnerabilityDropdown: {fileID: 0}
+  immunityDropdown: {fileID: 0}
+  immunityAgaintsStatusDropdown: {fileID: 0}
+  enemyActionList: {fileID: 0}
 --- !u!1 &427949581
 GameObject:
   m_ObjectHideFlags: 0

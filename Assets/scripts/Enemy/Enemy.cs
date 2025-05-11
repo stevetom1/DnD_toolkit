@@ -14,33 +14,33 @@ public class Enemy : MonoBehaviour
 
 
     [field: SerializeField] public string EnemyName { get; set; }
-    public int MaxHp { get; set; }
-    public int Defense { get; set; }
-    public int Speed { get; set; }
+    [field: SerializeField] public int MaxHp { get; set; }
+    [field: SerializeField] public int Defense { get; set; }
+    [field: SerializeField] public int Speed { get; set; }
     [field: SerializeField] public Size EnemySize { get; set; }
     [field: SerializeField] public Type EnemyType { get; set; }
-    public int Experience { get; set; }
-    public int NumberOfAttacks { get; set; }
+    [field: SerializeField] public int Experience { get; set; }
+    [field: SerializeField] public int NumberOfAttacks { get; set; }
 
-    public int Strength { get; set; }
-    public int Dexterity { get; set; }
-    public int Constitution { get; set; }
-    public int Intelligence { get; set; }
-    public int Wisdom { get; set; }
+    [field: SerializeField] public int Strength { get; set; }
+    [field: SerializeField] public int Dexterity { get; set; }
+    [field: SerializeField] public int Constitution { get; set; }
+    [field: SerializeField] public int Intelligence { get; set; }
+    [field: SerializeField] public int Wisdom { get; set; }
     [field: SerializeField] public int Charisma { get; set; }
 
-    public int BonusStrength { get; set; }
-    public int BonusDexterity { get; set; }
-    public int BonusConstitution { get; set; }
-    public int BonusIntelligence { get; set; }
-    public int BonusWisdom { get; set; }
+    [field: SerializeField] public int BonusStrength { get; set; }
+    [field: SerializeField] public int BonusDexterity { get; set; }
+    [field: SerializeField] public int BonusConstitution { get; set; }
+    [field: SerializeField] public int BonusIntelligence { get; set; }
+    [field: SerializeField] public int BonusWisdom { get; set; }
     [field: SerializeField] public int BonusCharisma { get; set; }
 
-    public int STBonusStrength { get; set; }
-    public int STBonusDexterity { get; set; }
-    public int STBonusConstitution { get; set; }
-    public int STBonusIntelligence { get; set; }
-    public int STBonusWisdom { get; set; }
+    [field: SerializeField] public int STBonusStrength { get; set; }
+    [field: SerializeField] public int STBonusDexterity { get; set; }
+    [field: SerializeField] public int STBonusConstitution { get; set; }
+    [field: SerializeField] public int STBonusIntelligence { get; set; }
+    [field: SerializeField] public int STBonusWisdom { get; set; }
     [field:SerializeField]public int STBonusCharisma { get; set; }
 
     [field: SerializeField] public List<DamageType> Weakneses { get; set; }
@@ -83,6 +83,7 @@ public class Enemy : MonoBehaviour
 
     public void Start()
     {
+
         weaknesesDropdown = GameObject.Find("Weakneses").GetComponent<DropdownManager>();
         vulnerabilityDropdown = GameObject.Find("Vulnerability").GetComponent<DropdownManager>();
         immunityDropdown = GameObject.Find("Immunity").GetComponent<DropdownManager>();
