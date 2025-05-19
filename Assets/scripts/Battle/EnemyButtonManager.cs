@@ -6,7 +6,7 @@ using System.Collections.Generic;
 public class EnemyButtonManager : MonoBehaviour
 {
     public GameObject buttonPrefab;
-    public GameObject enemyPrefab; // Ensure this prefab has an Enemy component for stats
+    public GameObject enemyPrefab;
 
     private DatabaseManager db;
     private HexTile currentTile;
@@ -29,7 +29,6 @@ public class EnemyButtonManager : MonoBehaviour
     public void ShowEnemySelection(HexTile tile, Transform buttonContainer, GameObject buttonPanel)
     {
         currentTile = tile;
-
         foreach (Transform child in buttonContainer)
             Destroy(child.gameObject);
 
@@ -42,9 +41,11 @@ public class EnemyButtonManager : MonoBehaviour
                 label.text = enemy.EnemyName;
 
             Button btn = btnObj.GetComponent<Button>();
+
+            HexTile selectedTile = tile;
             btn.onClick.AddListener(() =>
             {
-                AddEnemyToTile(enemy);
+                AddEnemyToTile(enemy, selectedTile);
                 buttonPanel.SetActive(false);
             });
         }
@@ -52,59 +53,50 @@ public class EnemyButtonManager : MonoBehaviour
         buttonPanel.SetActive(true);
     }
 
-    private void AddEnemyToTile(Enemy enemy)
+    private void AddEnemyToTile(Enemy enemyData, HexTile tile)
     {
-        if (currentTile == null)
+        if (tile == null)
         {
             Debug.LogError("No tile selected to place the enemy.");
             return;
         }
 
-        // Destroy any existing enemy on this tile
-        if (currentTile.enemyObject != null)
+        if (tile.enemyObject != null)
         {
-            GameObject.Destroy(currentTile.enemyObject);
+            Destroy(tile.enemyObject);
         }
 
-        // Instantiate on correct tile
-        GameObject enemyObj = Instantiate(enemyPrefab, currentTile.transform);
-        enemyObj.transform.localPosition = Vector3.zero;
+        GameObject enemyObj = Instantiate(enemyPrefab, tile.transform);
+        //enemyObj.transform.localPosition = Vector3.zero;
 
-        // Assign stats
         Enemy enemyComponent = enemyObj.GetComponent<Enemy>();
         if (enemyComponent != null)
         {
-            JsonUtility.FromJsonOverwrite(JsonUtility.ToJson(enemy), enemyComponent);
+            JsonUtility.FromJsonOverwrite(JsonUtility.ToJson(enemyData), enemyComponent);
+            enemyComponent.hexX = tile.corX;
+            enemyComponent.hexY = tile.corY;
 
-            // Optional logging
-            Debug.Log($"Spawned enemy '{enemy.EnemyName}' at hex ({currentTile.corX}, {currentTile.corY})");
 
-            // Optional: Display enemy name on tile if UI is set up
-            Transform visualGO = currentTile.transform.Find("GameObject");
+            Transform visualGO = tile.transform.Find("GameObject");
             if (visualGO != null)
             {
                 visualGO.gameObject.SetActive(true);
                 TextMeshProUGUI nameText = visualGO.GetComponentInChildren<TextMeshProUGUI>();
                 if (nameText != null)
-                {
-                    nameText.text = enemy.EnemyName;
-                }
-                else
-                {
-                    Debug.LogWarning("TextMeshProUGUI not found inside GameObject.");
-                }
-            }
-            else
-            {
-                Debug.LogWarning("Child 'GameObject' not found on hex tile.");
+                    nameText.text = enemyData.EnemyName;
             }
         }
         else
         {
-            Debug.LogError("The enemy prefab does not have an Enemy component to receive stats.");
+            Debug.LogError("Enemy component missing on prefab!");
         }
 
-        // Register enemy on tile
-        currentTile.SetEnemy(enemy, enemyObj);
+        tile.SetEnemy(enemyData, enemyObj);
+    }
+
+
+    public void SetCurrentTile(HexTile tile)
+    {
+        currentTile = tile;
     }
 }

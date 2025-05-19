@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 4359285699164435709}
   - component: {fileID: 8206530074182257599}
   - component: {fileID: 6057951057880816355}
-  - component: {fileID: -8195506980540472099}
+  - component: {fileID: -1616635900664365855}
   m_Layer: 5
   m_Name: HexPrefab
   m_TagString: Untagged
@@ -122,14 +122,14 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &-8195506980540472099
+--- !u!114 &-1616635900664365855
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 250775556146459697}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6f5454251b6b7c84190eafbf35d44574, type: 3}
   m_Name: 
@@ -141,6 +141,9 @@ MonoBehaviour:
   addPlayerPrefab: {fileID: 0}
   addEnemyPrefab: {fileID: 0}
   movePrefab: {fileID: 0}
+  enemyOnTile: {fileID: 0}
+  enemyObject: {fileID: 0}
+  hasEnemy: 0
 --- !u!1 &406486605335600499
 GameObject:
   m_ObjectHideFlags: 0

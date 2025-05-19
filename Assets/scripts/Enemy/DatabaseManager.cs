@@ -131,9 +131,7 @@ public class DatabaseManager : MonoBehaviour
                 enemy.Defense = dbEnemy.Defense;
                 enemy.Speed = dbEnemy.Speed;
                 enemy.EnemySize = StringToEnum<Size>(dbEnemy.EnemySize);
-                Debug.Log(enemy.EnemySize);
                 enemy.EnemyType = StringToEnum<Type>(dbEnemy.EnemyType);
-                Debug.Log(enemy.EnemyType);
                 enemy.Experience = dbEnemy.Experience;
                 enemy.NumberOfAttacks = dbEnemy.NumberOfAttacks;
                 enemy.Strength = dbEnemy.Strength;

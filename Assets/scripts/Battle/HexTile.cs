@@ -39,6 +39,12 @@ public class HexTile : MonoBehaviour
         this.movePrefab = movePrefab;
     }
 
+    public void SetCoordinates(int x, int y)
+    {
+        corX = x;
+        corY = y;
+    }
+
     void Start()
     {
         button = GetComponent<Button>();
@@ -133,8 +139,13 @@ public class HexTile : MonoBehaviour
         {
             ShowActionButtons();
             currentlySelectedHex = this;
+
+            EnemyButtonManager.Instance.SetCurrentTile(this);
         }
     }
+
+
+
 
     static void HideActionButtonsFromAll()
     {
@@ -199,7 +210,7 @@ public class HexTile : MonoBehaviour
             return;
         }
 
-        EnemyButtonManager.Instance.ShowEnemySelection(this, buttonContainer, buttonPanel);
+        EnemyButtonManager.Instance.ShowEnemySelection(currentlySelectedHex, buttonContainer, buttonPanel);
         HideActionButtonsFromAll();
     }
 
@@ -276,7 +287,6 @@ public class HexTile : MonoBehaviour
             JsonUtility.FromJsonOverwrite(json, player);
             player.hexX = currentlySelectedHex.corX;
             player.hexY = currentlySelectedHex.corY;
-            Debug.Log($"Character spawned on hex ({player.hexX}, {player.hexY})");
 
             Transform visualGO = currentlySelectedHex.transform.Find("GameObject");
             if (visualGO != null)
@@ -288,14 +298,6 @@ public class HexTile : MonoBehaviour
                 {
                     nameText.text = player.name;
                 }
-                else
-                {
-                    Debug.LogWarning("TextMeshProUGUI not found inside the GameObject.");
-                }
-            }
-            else
-            {
-                Debug.LogWarning("Child GameObject not found on hex tile.");
             }
         }
         else

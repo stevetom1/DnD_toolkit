@@ -81,6 +81,8 @@ public class Enemy : MonoBehaviour
 
     private DatabaseManager databaseManager;
 
+    public int hexX;
+    public int hexY;
     public void Start()
     {
 

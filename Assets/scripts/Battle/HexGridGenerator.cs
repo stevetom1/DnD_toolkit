@@ -40,21 +40,21 @@ public class HexGridGenerator : MonoBehaviour
         {
             for (int y = 0; y < gridHeight; y++)
             {
-
                 Vector2 position = CalculateHexPosition(x, y);
                 position.x -= gridWidthOffset;
                 position.y += gridHeightOffset;
+
                 GameObject hex = Instantiate(hexPrefab, panel);
-                HexTile hexTileScript = hex.GetComponent<HexTile>();
-                hexTileScript.corX = x;
-                hexTileScript.corY = y;
                 hex.GetComponent<RectTransform>().anchoredPosition = position;
 
-                HexTile hexTile = hex.AddComponent<HexTile>();
+                HexTile hexTile = hex.GetComponent<HexTile>();
+                hexTile.SetCoordinates(x, y);
                 hexTile.SetupHexTile(addPlayerButtonPrefab, addEnemyButtonPrefab, moveButtonPrefab);
             }
         }
     }
+
+
 
     Vector2 CalculateHexPosition(int x, int y)
     {
