@@ -31,6 +31,8 @@ public class HexTile : MonoBehaviour
     public bool hasEnemy = false;
 
     private EnemyButtonManager enemyButtonManager;
+    private StatsPanelManager statsPanelManager;
+
 
     public void SetupHexTile(GameObject addPlayerPrefab, GameObject addEnemyPrefab, GameObject movePrefab)
     {
@@ -60,6 +62,8 @@ public class HexTile : MonoBehaviour
 
         if (buttonPrefab == null)
             buttonPrefab = Resources.Load<GameObject>("CharacterButton");
+
+        statsPanelManager = FindObjectOfType<StatsPanelManager>();
     }
 
     void CreateButtonPanel()
@@ -142,10 +146,26 @@ public class HexTile : MonoBehaviour
 
             EnemyButtonManager.Instance.SetCurrentTile(this);
         }
+
+        if (statsPanelManager != null)
+        {
+            if (characterInstanceOnThisTile != null)
+            {
+                Player player = characterInstanceOnThisTile.GetComponent<Player>();
+                if (player != null)
+                    statsPanelManager.DisplayPlayerStats(player);
+            }
+            else if (hasEnemy && enemyOnTile)
+            {
+                statsPanelManager.DisplayEnemyStats(enemyOnTile);
+            }
+            else
+            {
+                statsPanelManager.ClearStats();
+            }
+        }
+
     }
-
-
-
 
     static void HideActionButtonsFromAll()
     {
@@ -190,7 +210,12 @@ public class HexTile : MonoBehaviour
 
     void AddPlayerAction()
     {
-        Debug.Log("Add player!");
+        if (hasEnemy)
+        {
+            Debug.LogWarning("Cannot add player: Tile already contains an enemy.");
+            return;
+        }
+
         if (buttonPanel != null)
         {
             GenerateCharacterButtons();
@@ -202,11 +227,15 @@ public class HexTile : MonoBehaviour
 
     void AddEnemyAction()
     {
-        Debug.Log("Add enemy!");
+        if (characterInstanceOnThisTile != null)
+        {
+            Debug.LogWarning("Cannot add enemy: Tile already contains a player.");
+            return;
+        }
 
         if (EnemyButtonManager.Instance == null)
         {
-            Debug.LogError("EnemyButtonManager instance not found!");
+            Debug.LogError("EnemyButtonManager instance not found");
             return;
         }
 
@@ -223,7 +252,7 @@ public class HexTile : MonoBehaviour
 
     void MoveAction()
     {
-        Debug.Log("Move!");
+        Debug.Log("Move");
     }
 
     void GenerateCharacterButtons()
@@ -256,7 +285,14 @@ public class HexTile : MonoBehaviour
     {
         if (currentlySelectedHex == null)
         {
-            Debug.LogError("No hex tile selected.");
+            Debug.LogError("No hex tile selected");
+            return;
+        }
+
+        if (currentlySelectedHex.hasEnemy)
+        {
+            Debug.LogWarning("Cannot place player: Tile already has an enemy.");
+            buttonPanel.SetActive(false);
             return;
         }
 
@@ -271,7 +307,7 @@ public class HexTile : MonoBehaviour
 
         if (prefab == null)
         {
-            Debug.LogError("CharacterPrefab not found in Resources folder!");
+            Debug.LogError("CharacterPrefab not found in Resources folder");
             return;
         }
 
@@ -292,19 +328,47 @@ public class HexTile : MonoBehaviour
             if (visualGO != null)
             {
                 visualGO.gameObject.SetActive(true);
-
                 TextMeshProUGUI nameText = visualGO.GetComponentInChildren<TextMeshProUGUI>();
                 if (nameText != null)
-                {
                     nameText.text = player.name;
-                }
             }
         }
         else
         {
-            Debug.LogError("Player component not found on character prefab!");
+            Debug.LogError("Player component not found on character prefab");
         }
 
         buttonPanel.SetActive(false);
+
+        if (statsPanelManager != null)
+        {
+            if (characterInstanceOnThisTile != null)
+            {
+                if (player != null)
+                    statsPanelManager.DisplayPlayerStats(player);
+            }
+            else if (hasEnemy && enemyOnTile != null)
+            {
+                statsPanelManager.DisplayEnemyStats(enemyOnTile);
+            }
+            else
+            {
+                statsPanelManager.ClearStats();
+            }
+        }
+
+        statsPanelManager.DisplayPlayerStats(player);
+    }
+
+    public bool IsOccupied()
+    {
+        return characterInstanceOnThisTile != null || hasEnemy;
+    }
+
+    public string GetOccupantType()
+    {
+        if (characterInstanceOnThisTile != null) return "Player";
+        if (hasEnemy) return "Enemy";
+        return "Empty";
     }
 }

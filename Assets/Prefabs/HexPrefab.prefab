@@ -144,6 +144,7 @@ MonoBehaviour:
   enemyOnTile: {fileID: 0}
   enemyObject: {fileID: 0}
   hasEnemy: 0
+  statsPanelManager: {fileID: 0}
 --- !u!1 &406486605335600499
 GameObject:
   m_ObjectHideFlags: 0
