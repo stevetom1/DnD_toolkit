@@ -323,34 +323,67 @@ public class HexTile : MonoBehaviour
 
         if (originTile.characterInstanceOnThisTile != null)
         {
-            characterInstanceOnThisTile = originTile.characterInstanceOnThisTile;
-            characterInstanceOnThisTile.transform.SetParent(transform);
-            characterInstanceOnThisTile.transform.localPosition = Vector3.zero;
+            // Move player character visually and logically
+            GameObject movingPlayer = originTile.characterInstanceOnThisTile;
             originTile.characterInstanceOnThisTile = null;
 
-            var player = characterInstanceOnThisTile.GetComponent<Player>();
+            // Remove any visuals from origin tile (optional: find named child and hide/deactivate)
+            Transform oldVisual = originTile.transform.Find("GameObject");
+            if (oldVisual != null)
+                oldVisual.gameObject.SetActive(false);
+
+            characterInstanceOnThisTile = movingPlayer;
+            characterInstanceOnThisTile.transform.SetParent(transform, false);
+            characterInstanceOnThisTile.transform.localPosition = Vector3.zero;
+
+            Player player = characterInstanceOnThisTile.GetComponent<Player>();
             if (player != null)
             {
                 player.hexX = corX;
                 player.hexY = corY;
+
+                // Activate visual on new tile
+                Transform newVisual = transform.Find("GameObject");
+                if (newVisual != null)
+                {
+                    newVisual.gameObject.SetActive(true);
+                    TextMeshProUGUI nameText = newVisual.GetComponentInChildren<TextMeshProUGUI>();
+                    if (nameText != null)
+                        nameText.text = player.name;
+                }
             }
         }
         else if (originTile.enemyObject != null)
         {
-            enemyObject = originTile.enemyObject;
-            enemyObject.transform.SetParent(transform);
-            enemyObject.transform.localPosition = Vector3.zero;
-            enemyOnTile = originTile.enemyOnTile;
-            hasEnemy = true;
-
+            GameObject movingEnemy = originTile.enemyObject;
             originTile.enemyObject = null;
             originTile.enemyOnTile = null;
             originTile.hasEnemy = false;
+
+            Transform oldVisual = originTile.transform.Find("GameObject");
+            if (oldVisual != null)
+                oldVisual.gameObject.SetActive(false);
+
+            enemyObject = movingEnemy;
+            enemyOnTile = movingEnemy.GetComponent<Enemy>();
+            hasEnemy = true;
+
+            enemyObject.transform.SetParent(transform, false);
+            enemyObject.transform.localPosition = Vector3.zero;
 
             if (enemyOnTile != null)
             {
                 enemyOnTile.hexX = corX;
                 enemyOnTile.hexY = corY;
+
+                Transform newVisual = transform.Find("GameObject");
+                if (newVisual != null)
+                {
+                    newVisual.gameObject.SetActive(true);
+                    TextMeshProUGUI nameText = newVisual.GetComponentInChildren<TextMeshProUGUI>();
+                    if (nameText != null)
+                        nameText.text = enemyOnTile.name;
+                }
             }
         }
 
