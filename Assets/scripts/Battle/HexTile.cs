@@ -33,6 +33,12 @@ public class HexTile : MonoBehaviour
     private EnemyButtonManager enemyButtonManager;
     private StatsPanelManager statsPanelManager;
 
+    private static bool isMoveMode = false;
+    private static HexTile originTile = null;
+    private static List<HexTile> highlightedTiles = new List<HexTile>();
+    public static List<HexTile> allTiles = new List<HexTile>();
+
+    public int moveRange = 0;
 
     public void SetupHexTile(GameObject addPlayerPrefab, GameObject addEnemyPrefab, GameObject movePrefab)
     {
@@ -64,6 +70,8 @@ public class HexTile : MonoBehaviour
             buttonPrefab = Resources.Load<GameObject>("CharacterButton");
 
         statsPanelManager = FindObjectOfType<StatsPanelManager>();
+
+        allTiles.Add(this);
     }
 
     void CreateButtonPanel()
@@ -126,6 +134,20 @@ public class HexTile : MonoBehaviour
 
     void OnHexClick()
     {
+        if (isMoveMode)
+        {
+            if (highlightedTiles.Contains(this))
+            {
+                MoveCharacterToThisTile();
+            }
+            else
+            {
+                CancelMove();
+            }
+
+            return;
+        }
+
         if (buttonPanel != null)
             buttonPanel.SetActive(false);
 
@@ -252,7 +274,100 @@ public class HexTile : MonoBehaviour
 
     void MoveAction()
     {
-        Debug.Log("Move");
+        if (characterInstanceOnThisTile == null && !hasEnemy) {
+            Debug.Log(characterInstanceOnThisTile);
+                return;
+        }
+        Debug.Log("Is player or enemy");
+        isMoveMode = true;
+        originTile = this;
+
+        moveRange = 0;
+
+        if (characterInstanceOnThisTile != null)
+        {
+            var player = characterInstanceOnThisTile.GetComponent<Player>();
+            if (player != null)
+            {
+                moveRange = player.speed;
+                Debug.Log(moveRange);
+            }
+        }
+        else if (enemyOnTile != null)
+        {
+            moveRange = enemyOnTile.Speed;
+        }
+
+        HighlightReachableTiles(moveRange);
+        HideActionButtonsFromAll();
+    }
+
+    void HighlightReachableTiles(int range)
+    {
+        highlightedTiles.Clear();
+
+        foreach (HexTile tile in allTiles)
+        {
+            int distance = Mathf.Abs(tile.corX - corX) + Mathf.Abs(tile.corY - corY);
+            if (distance <= range && tile != this && !tile.IsOccupied())
+            {
+                tile.GetComponent<Image>().color = Color.cyan;
+                highlightedTiles.Add(tile);
+            }
+        }
+    }
+
+    void MoveCharacterToThisTile()
+    {
+        if (originTile == null) return;
+
+        if (originTile.characterInstanceOnThisTile != null)
+        {
+            characterInstanceOnThisTile = originTile.characterInstanceOnThisTile;
+            characterInstanceOnThisTile.transform.SetParent(transform);
+            characterInstanceOnThisTile.transform.localPosition = Vector3.zero;
+            originTile.characterInstanceOnThisTile = null;
+
+            var player = characterInstanceOnThisTile.GetComponent<Player>();
+            if (player != null)
+            {
+                player.hexX = corX;
+                player.hexY = corY;
+            }
+        }
+        else if (originTile.enemyObject != null)
+        {
+            enemyObject = originTile.enemyObject;
+            enemyObject.transform.SetParent(transform);
+            enemyObject.transform.localPosition = Vector3.zero;
+            enemyOnTile = originTile.enemyOnTile;
+            hasEnemy = true;
+
+            originTile.enemyObject = null;
+            originTile.enemyOnTile = null;
+            originTile.hasEnemy = false;
+
+            if (enemyOnTile != null)
+            {
+                enemyOnTile.hexX = corX;
+                enemyOnTile.hexY = corY;
+            }
+        }
+
+        CancelMove();
+    }
+
+    void CancelMove()
+    {
+        isMoveMode = false;
+        originTile = null;
+
+        foreach (HexTile tile in highlightedTiles)
+        {
+            tile.GetComponent<Image>().color = Color.white;
+        }
+
+        highlightedTiles.Clear();
     }
 
     void GenerateCharacterButtons()
@@ -364,11 +479,6 @@ public class HexTile : MonoBehaviour
     {
         return characterInstanceOnThisTile != null || hasEnemy;
     }
-
-    public string GetOccupantType()
-    {
-        if (characterInstanceOnThisTile != null) return "Player";
-        if (hasEnemy) return "Enemy";
-        return "Empty";
-    }
 }
+
+
