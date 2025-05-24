@@ -129,7 +129,7 @@ public class HexTile : MonoBehaviour
 
         addPlayerButton.GetComponent<Button>().onClick.AddListener(() => AddPlayerAction());
         addEnemyButton.GetComponent<Button>().onClick.AddListener(() => AddEnemyAction());
-        moveButton.GetComponent<Button>().onClick.AddListener(() => MoveAction());
+        moveButton.GetComponent<Button>().onClick.AddListener(() => MoveAction(currentlySelectedHex));
     }
 
     void OnHexClick()
@@ -272,43 +272,45 @@ public class HexTile : MonoBehaviour
         this.hasEnemy = true;
     }
 
-    void MoveAction()
+    void MoveAction(HexTile currentHex)
     {
-        if (characterInstanceOnThisTile == null && !hasEnemy) {
+        if (currentHex.characterInstanceOnThisTile == null && !currentHex.hasEnemy) {
             Debug.Log(characterInstanceOnThisTile);
-                return;
+            Debug.Log(hasEnemy);
+            return;
         }
         Debug.Log("Is player or enemy");
         isMoveMode = true;
-        originTile = this;
+        originTile = currentlySelectedHex;
+        Debug.Log(originTile);
 
         moveRange = 0;
 
-        if (characterInstanceOnThisTile != null)
+        if (currentHex.characterInstanceOnThisTile != null)
         {
-            var player = characterInstanceOnThisTile.GetComponent<Player>();
+            var player = currentHex.characterInstanceOnThisTile.GetComponent<Player>();
             if (player != null)
             {
                 moveRange = player.speed;
                 Debug.Log(moveRange);
             }
         }
-        else if (enemyOnTile != null)
+        else if (currentHex.enemyOnTile != null)
         {
             moveRange = enemyOnTile.Speed;
         }
 
-        HighlightReachableTiles(moveRange);
+        HighlightReachableTiles(moveRange, currentHex);
         HideActionButtonsFromAll();
     }
 
-    void HighlightReachableTiles(int range)
+    void HighlightReachableTiles(int range, HexTile currentHex)
     {
         highlightedTiles.Clear();
 
         foreach (HexTile tile in allTiles)
         {
-            int distance = Mathf.Abs(tile.corX - corX) + Mathf.Abs(tile.corY - corY);
+            int distance = Mathf.Abs(tile.corX - currentHex.corX) + Mathf.Abs(tile.corY - currentHex.corY);
             if (distance <= range && tile != this && !tile.IsOccupied())
             {
                 tile.GetComponent<Image>().color = Color.cyan;
@@ -323,72 +325,52 @@ public class HexTile : MonoBehaviour
 
         if (originTile.characterInstanceOnThisTile != null)
         {
-            // Move player character visually and logically
-            GameObject movingPlayer = originTile.characterInstanceOnThisTile;
+            GameObject movingCharacter = originTile.characterInstanceOnThisTile;
+            movingCharacter.transform.SetParent(transform);
+            movingCharacter.transform.localPosition = Vector3.zero;
+
+            this.characterInstanceOnThisTile = movingCharacter;
             originTile.characterInstanceOnThisTile = null;
 
-            // Remove any visuals from origin tile (optional: find named child and hide/deactivate)
-            Transform oldVisual = originTile.transform.Find("GameObject");
-            if (oldVisual != null)
-                oldVisual.gameObject.SetActive(false);
-
-            characterInstanceOnThisTile = movingPlayer;
-            characterInstanceOnThisTile.transform.SetParent(transform, false);
-            characterInstanceOnThisTile.transform.localPosition = Vector3.zero;
-
-            Player player = characterInstanceOnThisTile.GetComponent<Player>();
+            Player player = movingCharacter.GetComponent<Player>();
             if (player != null)
             {
                 player.hexX = corX;
                 player.hexY = corY;
-
-                // Activate visual on new tile
-                Transform newVisual = transform.Find("GameObject");
-                if (newVisual != null)
-                {
-                    newVisual.gameObject.SetActive(true);
-                    TextMeshProUGUI nameText = newVisual.GetComponentInChildren<TextMeshProUGUI>();
-                    if (nameText != null)
-                        nameText.text = player.name;
-                }
             }
-        }
-        else if (originTile.enemyObject != null)
-        {
-            GameObject movingEnemy = originTile.enemyObject;
-            originTile.enemyObject = null;
-            originTile.enemyOnTile = null;
-            originTile.hasEnemy = false;
 
             Transform oldVisual = originTile.transform.Find("GameObject");
             if (oldVisual != null)
                 oldVisual.gameObject.SetActive(false);
 
-            enemyObject = movingEnemy;
-            enemyOnTile = movingEnemy.GetComponent<Enemy>();
-            hasEnemy = true;
+            Transform newVisual = transform.Find("GameObject");
+            if (newVisual != null)
+                newVisual.gameObject.SetActive(true);
+        }
+        else if (originTile.enemyObject != null)
+        {
+            GameObject movingEnemy = originTile.enemyObject;
+            movingEnemy.transform.SetParent(transform);
+            movingEnemy.transform.localPosition = Vector3.zero;
 
-            enemyObject.transform.SetParent(transform, false);
-            enemyObject.transform.localPosition = Vector3.zero;
+            this.enemyObject = movingEnemy;
+            this.enemyOnTile = originTile.enemyOnTile;
+            this.hasEnemy = true;
+
+            originTile.enemyObject = null;
+            originTile.enemyOnTile = null;
+            originTile.hasEnemy = false;
 
             if (enemyOnTile != null)
             {
                 enemyOnTile.hexX = corX;
                 enemyOnTile.hexY = corY;
-
-                Transform newVisual = transform.Find("GameObject");
-                if (newVisual != null)
-                {
-                    newVisual.gameObject.SetActive(true);
-                    TextMeshProUGUI nameText = newVisual.GetComponentInChildren<TextMeshProUGUI>();
-                    if (nameText != null)
-                        nameText.text = enemyOnTile.name;
-                }
             }
         }
 
         CancelMove();
     }
+
 
     void CancelMove()
     {
@@ -513,5 +495,3 @@ public class HexTile : MonoBehaviour
         return characterInstanceOnThisTile != null || hasEnemy;
     }
 }
-
-
