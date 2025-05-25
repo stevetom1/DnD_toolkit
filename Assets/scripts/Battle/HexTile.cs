@@ -4,6 +4,7 @@ using UnityEngine.EventSystems;
 using TMPro;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 public class HexTile : MonoBehaviour
 {
@@ -39,6 +40,16 @@ public class HexTile : MonoBehaviour
     public static List<HexTile> allTiles = new List<HexTile>();
 
     public int moveRange = 0;
+
+    private static readonly (int dx, int dy)[] EVEN_Q_DIRECTIONS = new (int, int)[6]
+    {
+        (1,0),(0,-1),(-1,-1),(-1,0),(-1,1),(0,1)
+    };
+
+    private static readonly (int dx, int dy)[] ODD_Q_DIRECTIONS = new (int, int)[6]
+    {
+        (1,0),(1,-1),(0,-1),(-1,0),(0,1),(1,1)
+    };
 
     public void SetupHexTile(GameObject addPlayerPrefab, GameObject addEnemyPrefab, GameObject movePrefab)
     {
@@ -291,7 +302,7 @@ public class HexTile : MonoBehaviour
             var player = currentHex.characterInstanceOnThisTile.GetComponent<Player>();
             if (player != null)
             {
-                moveRange = player.speed;
+                moveRange = 3;//player.speed;
                 Debug.Log(moveRange);
             }
         }
@@ -308,14 +319,93 @@ public class HexTile : MonoBehaviour
     {
         highlightedTiles.Clear();
 
-        foreach (HexTile tile in allTiles)
+        HashSet<HexTile> reachable = GetReachableTiles(currentHex, range);
+        foreach (HexTile tile in reachable)
         {
-            int distance = Mathf.Abs(tile.corX - currentHex.corX) + Mathf.Abs(tile.corY - currentHex.corY);
+            tile.GetComponent<Image>().color = Color.cyan;
+            highlightedTiles.Add(tile);
+
+            /*if (-range + currentHex.corX <= tile.corX && tile.corX <= range + currentHex.corX)
+            {
+                if ((Mathf.Max(-range + currentHex.corY, -tile.corX - range - currentHex.corX) <= tile.corY)&&(tile.corY <= Mathf.Min(range, -tile.corX + range - currentHex.corX)))
+                {
+                    tile.GetComponent<Image>().color = Color.cyan;
+                    highlightedTiles.Add(tile);
+                }
+
+            }*/
+            /*int distance = Mathf.Abs(tile.corX - currentHex.corX) + Mathf.Abs(tile.corY - currentHex.corY);
             if (distance <= range && tile != this && !tile.IsOccupied())
             {
                 tile.GetComponent<Image>().color = Color.cyan;
                 highlightedTiles.Add(tile);
+            }*/
+        }
+    }
+
+    public static HashSet<HexTile> GetReachableTiles(HexTile start, int steps)
+    {
+        //BFS(Breadth first search) algooritmus
+        var visited = new HashSet<HexTile>();
+        var queue = new Queue<(HexTile pos, int remainingSteps)>();
+        queue.Enqueue((start, steps));
+        visited.Add(start);
+
+        while (queue.Count > 0)
+        {
+            var (current, remainingSteps) = queue.Dequeue();
+
+            if (remainingSteps == 0) 
+            {
+                Debug.Log("remainingSteps = 0");
+                continue;
             }
+
+            var directions = current.corX % 2 == 0 ? EVEN_Q_DIRECTIONS : ODD_Q_DIRECTIONS;
+
+            foreach (var (dx, dy) in directions)
+            {
+                var neighbor = new Vector2Int(current.corX + dx, current.corY + dy);
+                HexTile found = allTiles.FirstOrDefault(t => t.corX == neighbor.x && t.corY == neighbor.y);
+
+                //Debug.Log("found: " + found.corX + ", " + found.corY);
+
+                if (found == null)
+                {
+                    Debug.Log("hex tile not found");
+                    continue;
+                }
+
+                if (!(found.characterInstanceOnThisTile == null && !found.hasEnemy))
+                {
+                    Debug.Log("player or enemy present");
+                    continue; 
+                }
+
+                if (visited.Contains(found)) continue;
+                visited.Add(found);
+                queue.Enqueue((found, remainingSteps - 1));
+            }
+        }
+        Debug.Log(visited.Count);
+        return visited;
+    }
+
+    public override bool Equals(object obj)
+    {
+        if (!(obj is HexTile)) return false;
+        HexTile other = (HexTile)obj;
+        return this.corX == other.corX && this.corY == other.corY;
+    }
+
+    public override int GetHashCode()
+    {
+        unchecked
+        {
+            int hash = 17;
+            hash = hash * 31 +corX;
+            hash = hash * 31 +corY;
+            return hash;
         }
     }
 
