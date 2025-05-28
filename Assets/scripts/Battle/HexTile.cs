@@ -28,7 +28,6 @@ public class HexTile : MonoBehaviour
     public GameObject addPlayerPrefab, addEnemyPrefab, movePrefab;
 
     public Enemy enemyOnTile;
-    public Enemy enemyData;
     public GameObject enemyObject;
     public bool hasEnemy = false;
 
@@ -282,11 +281,13 @@ public class HexTile : MonoBehaviour
         this.enemyOnTile = enemy;
         this.enemyObject = enemyObj;
         this.hasEnemy = true;
+        Debug.Log(enemyOnTile.EnemyName);
     }
 
     void MoveAction(HexTile currentHex)
     {
         Debug.Log(enemyOnTile);
+
         if (currentHex.characterInstanceOnThisTile == null && !currentHex.hasEnemy) {
             Debug.Log(characterInstanceOnThisTile);
             Debug.Log(hasEnemy);
@@ -304,14 +305,14 @@ public class HexTile : MonoBehaviour
             var player = currentHex.characterInstanceOnThisTile.GetComponent<Player>();
             if (player != null)
             {
-                moveRange = player.speed;
+                moveRange = 2;//player.speed;
                 //Debug.Log(moveRange);
             }
         }
         else if (currentHex.enemyOnTile != null)
         {
-            //Debug.Log(enemyOnTile.Speed);
-            moveRange = 3;//enemyData.Speed;//enemyOnTile.Speed;
+            Debug.Log(enemyOnTile);
+            moveRange = 3;// enemyOnTile.Speed;
         }
 
         HighlightReachableTiles(moveRange, currentHex);
@@ -360,7 +361,6 @@ public class HexTile : MonoBehaviour
 
             if (remainingSteps == 0) 
             {
-                Debug.Log("remainingSteps = 0");
                 continue;
             }
 
@@ -371,11 +371,9 @@ public class HexTile : MonoBehaviour
                 var neighbor = new Vector2Int(current.corX + dx, current.corY + dy);
                 HexTile found = allTiles.FirstOrDefault(t => t.corX == neighbor.x && t.corY == neighbor.y);
 
-                //Debug.Log("found: " + found.corX + ", " + found.corY);
 
                 if (found == null)
                 {
-                    Debug.Log("hex tile not found");
                     continue;
                 }
 
@@ -388,9 +386,10 @@ public class HexTile : MonoBehaviour
                 if (visited.Contains(found)) continue;
                 visited.Add(found);
                 queue.Enqueue((found, remainingSteps - 1));
+
+                Debug.Log("found: " + found.corX + ", " + found.corY);
             }
         }
-        Debug.Log(visited.Count);
         return visited;
     }
 
@@ -476,20 +475,20 @@ public class HexTile : MonoBehaviour
             {
                 newVisual.gameObject.SetActive(true);
 
-                Debug.Log("Trying to update enemy name: " + (enemyOnTile != null ? enemyOnTile.name : "enemyOnTile is null"));
+                Debug.Log("Trying to update enemy name: " + (enemyOnTile != null ? enemyOnTile.EnemyName : "enemyOnTile is null"));
 
                 TextMeshProUGUI[] textFields = newVisual.GetComponentsInChildren<TextMeshProUGUI>(true);
                 foreach (TextMeshProUGUI textField in textFields)
                 {
                     Debug.Log("Found TextMeshProUGUI: " + textField.name);
-                    textField.text = enemyOnTile != null ? enemyOnTile.name : "null";
+                    textField.text = enemyOnTile != null ? enemyOnTile.EnemyName : "null";
                 }
             }
             else
             {
                 Debug.LogWarning("No 'GameObject' child found on target tile!");
             }
-            Debug.Log(enemyOnTile.name);
+            Debug.Log(enemyObject);
         }
 
 
