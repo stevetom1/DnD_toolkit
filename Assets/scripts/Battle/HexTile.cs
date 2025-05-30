@@ -10,7 +10,7 @@ public class HexTile : MonoBehaviour
 {
     public Color highlightColor = Color.yellow;
     private Button button;
-    private static GameObject addPlayerButton, addEnemyButton, moveButton;
+    private static GameObject addPlayerButton, addEnemyButton, moveButton, fightButton;
     private static GameObject buttonPanel;
     private static Transform buttonContainer;
     private static bool buttonsVisible = false;
@@ -25,7 +25,7 @@ public class HexTile : MonoBehaviour
     public int corX;
     public int corY;
 
-    public GameObject addPlayerPrefab, addEnemyPrefab, movePrefab;
+    public GameObject addPlayerPrefab, addEnemyPrefab, movePrefab, fightPrefab;
 
     public Enemy enemyOnTile;
     public GameObject enemyObject;
@@ -43,19 +43,20 @@ public class HexTile : MonoBehaviour
 
     private static readonly (int dx, int dy)[] EVEN_Q_DIRECTIONS = new (int, int)[6]
     {
-        (1,0),(0,-1),(-1,-1),(-1,0),(-1,1),(0,1)
+        (1,0),(0,-1),(-1,-1),(-1,0),(1,-1),(0,1)
     };
 
     private static readonly (int dx, int dy)[] ODD_Q_DIRECTIONS = new (int, int)[6]
     {
-        (1,0),(1,-1),(0,-1),(-1,0),(0,1),(1,1)
+        (1,0),(-1,1),(0,-1),(-1,0),(0,1),(1,1)
     };
 
-    public void SetupHexTile(GameObject addPlayerPrefab, GameObject addEnemyPrefab, GameObject movePrefab)
+    public void SetupHexTile(GameObject addPlayerPrefab, GameObject addEnemyPrefab, GameObject movePrefab, GameObject fightPrefab)
     {
         this.addPlayerPrefab = addPlayerPrefab;
         this.addEnemyPrefab = addEnemyPrefab;
         this.movePrefab = movePrefab;
+        this.fightPrefab = fightPrefab;
     }
 
     public void SetCoordinates(int x, int y)
@@ -129,18 +130,24 @@ public class HexTile : MonoBehaviour
         addPlayerButton = Instantiate(addPlayerPrefab, parent);
         addEnemyButton = Instantiate(addEnemyPrefab, parent);
         moveButton = Instantiate(movePrefab, parent);
+        fightButton = Instantiate(fightPrefab, parent);
 
         addPlayerButton.SetActive(false);
         addEnemyButton.SetActive(false);
         moveButton.SetActive(false);
+        fightButton.SetActive(false);
 
         addPlayerButton.GetComponent<Button>().onClick.RemoveAllListeners();
         addEnemyButton.GetComponent<Button>().onClick.RemoveAllListeners();
         moveButton.GetComponent<Button>().onClick.RemoveAllListeners();
+        fightButton.GetComponent<Button>().onClick.RemoveAllListeners();
+
 
         addPlayerButton.GetComponent<Button>().onClick.AddListener(() => AddPlayerAction());
         addEnemyButton.GetComponent<Button>().onClick.AddListener(() => AddEnemyAction());
         moveButton.GetComponent<Button>().onClick.AddListener(() => MoveAction(currentlySelectedHex));
+        fightButton.GetComponent<Button>().onClick.AddListener(() => FightAction());
+
     }
 
     void OnHexClick()
@@ -205,6 +212,7 @@ public class HexTile : MonoBehaviour
         if (addPlayerButton != null) addPlayerButton.SetActive(false);
         if (addEnemyButton != null) addEnemyButton.SetActive(false);
         if (moveButton != null) moveButton.SetActive(false);
+        if (fightButton != null) fightButton.SetActive(false);
         buttonsVisible = false;
     }
 
@@ -224,14 +232,18 @@ public class HexTile : MonoBehaviour
         addPlayerButton.SetActive(true);
         addEnemyButton.SetActive(true);
         moveButton.SetActive(true);
+        fightButton.SetActive(true);
 
         moveButton.transform.SetAsLastSibling();
         addPlayerButton.transform.SetAsLastSibling();
         addEnemyButton.transform.SetAsLastSibling();
+        fightButton.transform.SetAsLastSibling();
 
         moveButton.GetComponent<RectTransform>().anchoredPosition = position + new Vector2(offsetX, offsetY);
         addPlayerButton.GetComponent<RectTransform>().anchoredPosition = position + new Vector2(offsetX, offsetY - (buttonSpacing + 40f));
         addEnemyButton.GetComponent<RectTransform>().anchoredPosition = position + new Vector2(offsetX, offsetY - 2 * (buttonSpacing + 40f));
+        fightButton.GetComponent<RectTransform>().anchoredPosition = position + new Vector2(offsetX, offsetY - 3 * (buttonSpacing + 40f));
+
 
         buttonsVisible = true;
     }
@@ -305,8 +317,7 @@ public class HexTile : MonoBehaviour
             var player = currentHex.characterInstanceOnThisTile.GetComponent<Player>();
             if (player != null)
             {
-                moveRange = 2;//player.speed;
-                //Debug.Log(moveRange);
+                moveRange = player.speed;
             }
         }
         else if (currentHex.enemyOnTile != null)
@@ -618,4 +629,11 @@ public class HexTile : MonoBehaviour
     {
         return characterInstanceOnThisTile != null || hasEnemy;
     }
+
+    void FightAction()
+    {
+        Debug.Log("Fight action triggered!");
+        HideActionButtonsFromAll();
+    }
+
 }

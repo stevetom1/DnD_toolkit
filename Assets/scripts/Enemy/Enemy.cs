@@ -15,6 +15,9 @@ public class Enemy : MonoBehaviour
 
     [field: SerializeField] public string EnemyName { get; set; }
     [field: SerializeField] public int MaxHp { get; set; }
+
+    [field: SerializeField] public int Health { get; set; }
+
     [field: SerializeField] public int Defense { get; set; }
     [field: SerializeField] public int Speed { get; set; }
     [field: SerializeField] public Size EnemySize { get; set; }
