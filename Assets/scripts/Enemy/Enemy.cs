@@ -88,6 +88,7 @@ public class Enemy : MonoBehaviour
     public int hexY;
     public void Start()
     {
+        Health = MaxHp;
 
         weaknesesDropdown = GameObject.Find("Weakneses").GetComponent<DropdownManager>();
         vulnerabilityDropdown = GameObject.Find("Vulnerability").GetComponent<DropdownManager>();

@@ -41,12 +41,12 @@ public class HexTile : MonoBehaviour
 
     public int moveRange = 0;
 
-    private static readonly (int dx, int dy)[] EVEN_Q_DIRECTIONS = new (int, int)[6]
+    public static readonly (int dx, int dy)[] EVEN_Q_DIRECTIONS = new (int, int)[6]
     {
         (1,0),(0,-1),(-1,-1),(-1,0),(1,-1),(0,1)
     };
 
-    private static readonly (int dx, int dy)[] ODD_Q_DIRECTIONS = new (int, int)[6]
+    public static readonly (int dx, int dy)[] ODD_Q_DIRECTIONS = new (int, int)[6]
     {
         (1,0),(-1,1),(0,-1),(-1,0),(0,1),(1,1)
     };
@@ -632,8 +632,10 @@ public class HexTile : MonoBehaviour
 
     void FightAction()
     {
-        Debug.Log("Fight action triggered!");
-        HideActionButtonsFromAll();
+        if (characterInstanceOnThisTile == null && !hasEnemy)
+        {
+            Debug.Log("No character on tile to initiate fight.");
+            return;
+        }
     }
-
 }

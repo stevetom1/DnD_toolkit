@@ -1,55 +1,87 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class BattleManager : MonoBehaviour
 {
-    public static BattleManager Instance;
+    public GameObject battlePanelPrefab;
+    private GameObject battlePanelInstance;
 
-    private void Awake()
+    private Button meleeButton;
+    private Button rangedButton;
+    private Button spellsButton;
+
+    private HexTile attackerTile;
+    private HexTile targetTile;
+
+    public void InitiateBattle(HexTile selectedTile)
     {
-        if (Instance == null)
-            Instance = this;
-        else
-            Destroy(gameObject);
+        attackerTile = selectedTile;
+        targetTile = FindTargetInRange(attackerTile);
+
+        if (targetTile == null)
+        {
+            Debug.Log("No valid enemy target in range.");
+            return;
+        }
+
+        ShowBattlePanel();
+        UpdateButtonStates();
     }
 
-    public void StartBattle(HexTile playerTile, HexTile enemyTile, string attackType)
+    void ShowBattlePanel()
     {
-        GameObject playerObj = playerTile.characterInstanceOnThisTile;
-        GameObject enemyObj = enemyTile.enemyObject;
-
-        if (playerObj == null || enemyObj == null)
+        if (battlePanelInstance == null)
         {
-            Debug.LogWarning("Missing player or enemy GameObject.");
-            return;
+            battlePanelInstance = Instantiate(battlePanelPrefab, FindObjectOfType<Canvas>().transform);
+
+            meleeButton = battlePanelInstance.transform.Find("MeleeButton").GetComponent<Button>();
+            rangedButton = battlePanelInstance.transform.Find("RangedButton").GetComponent<Button>();
+            spellsButton = battlePanelInstance.transform.Find("SpellsButton").GetComponent<Button>();
+
+            meleeButton.onClick.AddListener(() => ExecuteAttack("Melee"));
+            rangedButton.onClick.AddListener(() => ExecuteAttack("Ranged"));
+            spellsButton.onClick.AddListener(() => ExecuteAttack("Spells"));
         }
 
-        Player player = playerObj.GetComponent<Player>();
-        Enemy enemy = enemyObj.GetComponent<Enemy>();
+        battlePanelInstance.SetActive(true);
+    }
 
-        if (player == null || enemy == null)
+    void UpdateButtonStates()
+    {
+        int distance = CalculateHexDistance(attackerTile, targetTile);
+
+        meleeButton.interactable = distance == 1;
+        rangedButton.interactable = distance > 2;
+        spellsButton.interactable = true;
+    }
+
+    int CalculateHexDistance(HexTile a, HexTile b)
+    {
+        int dx = b.corX - a.corX;
+        int dy = b.corY - a.corY;
+        return Mathf.Max(Mathf.Abs(dx), Mathf.Abs(dy), Mathf.Abs(dx + dy));
+    }
+
+    HexTile FindTargetInRange(HexTile fromTile)
+    {
+        foreach (HexTile tile in HexTile.allTiles)
         {
-            Debug.LogError("Missing Player or Enemy script.");
-            return;
+            if (tile == fromTile) continue;
+
+            int distance = CalculateHexDistance(fromTile, tile);
+
+            if ((tile.characterInstanceOnThisTile != null || tile.hasEnemy) && distance <= 5)
+            {
+                return tile;
+            }
         }
 
-        int damage = 0;// = player.Attack;
-        if (attackType == "Spell") damage += 2; // Example logic
-        if (attackType == "Ranged") damage -= 1;
+        return null;
+    }
 
-        enemy.Health -= damage;
-        Debug.Log($"{attackType} attack: {player.name} deals {damage} to {enemy.EnemyName}");
-
-        if (enemy.Health <= 0)
-        {
-            Debug.Log($"{enemy.EnemyName} is defeated!");
-            GameObject.Destroy(enemyObj);
-            enemyTile.enemyObject = null;
-            enemyTile.enemyOnTile = null;
-            enemyTile.hasEnemy = false;
-        }
-        else
-        {
-            // Optional: retaliate logic
-        }
+    void ExecuteAttack(string type)
+    {
+        Debug.Log($"Executing {type} attack from ({attackerTile.corX},{attackerTile.corY}) to ({targetTile.corX},{targetTile.corY})");
+        battlePanelInstance.SetActive(false);
     }
 }
