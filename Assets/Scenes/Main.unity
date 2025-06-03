@@ -16048,7 +16048,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &302417235
 Transform:
   m_ObjectHideFlags: 0
@@ -24106,6 +24106,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 52c653dfe18d9a9498dd6b77ef3da6b8, type: 2}
   - {fileID: 11400000, guid: db66f2adbeb983a4680adf36f35d21e7, type: 2}
   inventoryManager: {fileID: 1042399205}
+  hexY: 0
+  hexX: 0
 --- !u!1 &479097220
 GameObject:
   m_ObjectHideFlags: 0
@@ -48456,10 +48458,31 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <EnemyName>k__BackingField: 
+  <MaxHp>k__BackingField: 0
+  <Health>k__BackingField: 0
+  <Defense>k__BackingField: 0
+  <Speed>k__BackingField: 0
   <EnemySize>k__BackingField: 0
   <EnemyType>k__BackingField: 0
+  <Experience>k__BackingField: 0
+  <NumberOfAttacks>k__BackingField: 0
+  <Strength>k__BackingField: 0
+  <Dexterity>k__BackingField: 0
+  <Constitution>k__BackingField: 0
+  <Intelligence>k__BackingField: 0
+  <Wisdom>k__BackingField: 0
   <Charisma>k__BackingField: 0
+  <BonusStrength>k__BackingField: 0
+  <BonusDexterity>k__BackingField: 0
+  <BonusConstitution>k__BackingField: 0
+  <BonusIntelligence>k__BackingField: 0
+  <BonusWisdom>k__BackingField: 0
   <BonusCharisma>k__BackingField: 0
+  <STBonusStrength>k__BackingField: 0
+  <STBonusDexterity>k__BackingField: 0
+  <STBonusConstitution>k__BackingField: 0
+  <STBonusIntelligence>k__BackingField: 0
+  <STBonusWisdom>k__BackingField: 0
   <STBonusCharisma>k__BackingField: 0
   <Weakneses>k__BackingField: 
   <Vulnerability>k__BackingField: 
@@ -48491,6 +48514,8 @@ MonoBehaviour:
   immunityDropdown: {fileID: 1209733683}
   immunityAgaintsStatusDropdown: {fileID: 242581935}
   enemyActionList: {fileID: 0}
+  hexX: 0
+  hexY: 0
 --- !u!4 &942031131
 Transform:
   m_ObjectHideFlags: 0
@@ -57890,7 +57915,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1863175842}
+      - m_Target: {fileID: 236863038}
         m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
         m_MethodName: SetActive
         m_Mode: 6
@@ -57902,7 +57927,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 2029750654}
+      - m_Target: {fileID: 2054959784}
         m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
         m_MethodName: SetActive
         m_Mode: 6
@@ -77156,7 +77181,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 302417234}
+      - m_Target: {fileID: 2054959784}
         m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
         m_MethodName: SetActive
         m_Mode: 6
@@ -77168,7 +77193,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1561033521}
+      - m_Target: {fileID: 236863038}
         m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
         m_MethodName: SetActive
         m_Mode: 6
@@ -97612,7 +97637,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &2054959785
 Transform:
   m_ObjectHideFlags: 0
@@ -98085,7 +98110,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2063972225}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 476093932}
+        m_TargetAssemblyTypeName: character, Assembly-CSharp
+        m_MethodName: ToBattle
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &2063972225
 MonoBehaviour:
   m_ObjectHideFlags: 0

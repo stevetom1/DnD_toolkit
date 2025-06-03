@@ -3004,9 +3004,10 @@ MonoBehaviour:
   addPlayerButtonPrefab: {fileID: 4061324143910392156, guid: e4be1cd9d46c0934b8b218637d22c6d2, type: 3}
   addEnemyButtonPrefab: {fileID: 4061324143910392156, guid: 76d230f9e3a79344ba69e78e951ab075, type: 3}
   moveButtonPrefab: {fileID: 7568049801875499852, guid: f6997d40182d7ca45a6e17cb9abb4eae, type: 3}
-  gridWidth: 20
-  gridHeight: 10
-  hexSize: 13
+  fightButtonPrefab: {fileID: 4061324143910392156, guid: 674db01dc37cd3a48af406eb9f3cecd6, type: 3}
+  gridWidth: 15
+  gridHeight: 7
+  hexSize: 27
   spacing: 50
   corX: 0
   corY: 0
@@ -3067,8 +3068,8 @@ MonoBehaviour:
   addPlayerPrefab: {fileID: 0}
   addEnemyPrefab: {fileID: 0}
   movePrefab: {fileID: 0}
+  fightPrefab: {fileID: 0}
   enemyOnTile: {fileID: 0}
-  enemyData: {fileID: 0}
   enemyObject: {fileID: 0}
   hasEnemy: 0
   moveRange: 0

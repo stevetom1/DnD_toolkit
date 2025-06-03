@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class character : MonoBehaviour
@@ -343,7 +344,7 @@ public class character : MonoBehaviour
 
     public void ShowStats()
     {
-        showName.text = player.name; 
+        showName.text = player.name;
         showClass.text = player.characterClass;
         showRace.text = player.race;
 
@@ -442,5 +443,10 @@ public class character : MonoBehaviour
     {
         UpdateNextButtonInteractable();
         ShowStats();
+    }
+
+    public void ToBattle()
+    {
+        SceneManager.LoadScene("Battle");
     }
 }
