@@ -51,6 +51,8 @@ public class HexTile : MonoBehaviour
         (1,0),(-1,1),(0,-1),(-1,0),(0,1),(1,1)
     };
 
+    public BattleManager battleManager;
+
     public void SetupHexTile(GameObject addPlayerPrefab, GameObject addEnemyPrefab, GameObject movePrefab, GameObject fightPrefab)
     {
         this.addPlayerPrefab = addPlayerPrefab;
@@ -82,6 +84,7 @@ public class HexTile : MonoBehaviour
             buttonPrefab = Resources.Load<GameObject>("CharacterButton");
 
         statsPanelManager = FindObjectOfType<StatsPanelManager>();
+        battleManager = FindObjectOfType<BattleManager>();
 
         allTiles.Add(this);
     }
@@ -632,10 +635,11 @@ public class HexTile : MonoBehaviour
 
     void FightAction()
     {
-        if (characterInstanceOnThisTile == null && !hasEnemy)
+        if ((currentlySelectedHex.characterInstanceOnThisTile != null || currentlySelectedHex.enemyObject != null) && battleManager != null)
         {
-            Debug.Log("No character on tile to initiate fight.");
-            return;
+            Debug.Log(currentlySelectedHex);
+            battleManager.InitiateBattle(currentlySelectedHex);
+            HideActionButtons();
         }
     }
 }

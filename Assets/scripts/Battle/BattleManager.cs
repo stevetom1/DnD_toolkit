@@ -6,12 +6,13 @@ public class BattleManager : MonoBehaviour
     public GameObject battlePanelPrefab;
     private GameObject battlePanelInstance;
 
-    private Button meleeButton;
-    private Button rangedButton;
-    private Button spellsButton;
+    public Button meleeButton;
+    public Button rangedButton;
+    public Button spellsButton;
 
     private HexTile attackerTile;
     private HexTile targetTile;
+
 
     public void InitiateBattle(HexTile selectedTile)
     {
