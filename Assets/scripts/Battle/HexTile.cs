@@ -325,8 +325,7 @@ public class HexTile : MonoBehaviour
         }
         else if (currentHex.enemyOnTile != null)
         {
-            Debug.Log(enemyOnTile);
-            moveRange = 3;// enemyOnTile.Speed;
+            moveRange = currentHex.enemyOnTile.Speed;
         }
 
         HighlightReachableTiles(moveRange, currentHex);

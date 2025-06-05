@@ -1930,11 +1930,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2849694131520263594, guid: 32f6b39058faead4c8728d51dface52b, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -131
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2849694131520263594, guid: 32f6b39058faead4c8728d51dface52b, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -456
+      value: 70
       objectReference: {fileID: 0}
     - target: {fileID: 2849694131520263594, guid: 32f6b39058faead4c8728d51dface52b, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -1951,6 +1951,10 @@ PrefabInstance:
     - target: {fileID: 4061324143910392156, guid: 32f6b39058faead4c8728d51dface52b, type: 3}
       propertyPath: m_Name
       value: RangedButton
+      objectReference: {fileID: 0}
+    - target: {fileID: 4061324143910392156, guid: 32f6b39058faead4c8728d51dface52b, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2944,7 +2948,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e1472a2587775543a8b767b33d92dc7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  battlePanelPrefab: {fileID: 1228994436}
+  battlePanelPrefab: {fileID: 1429237808}
   meleeButton: {fileID: 6738136409858652720, guid: d71b9677217229549b96222a77b935e6, type: 3}
   rangedButton: {fileID: 6738136409858652720, guid: 32f6b39058faead4c8728d51dface52b, type: 3}
   spellsButton: {fileID: 6738136409858652720, guid: c88998c3c8e44844c831de818bd6593e, type: 3}
@@ -3111,11 +3115,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2849694131520263594, guid: c88998c3c8e44844c831de818bd6593e, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -131
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2849694131520263594, guid: c88998c3c8e44844c831de818bd6593e, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -456
+      value: -33
       objectReference: {fileID: 0}
     - target: {fileID: 2849694131520263594, guid: c88998c3c8e44844c831de818bd6593e, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -3132,6 +3136,10 @@ PrefabInstance:
     - target: {fileID: 4061324143910392156, guid: c88998c3c8e44844c831de818bd6593e, type: 3}
       propertyPath: m_Name
       value: SpellsButton
+      objectReference: {fileID: 0}
+    - target: {fileID: 4061324143910392156, guid: c88998c3c8e44844c831de818bd6593e, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3883,11 +3891,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2849694131520263594, guid: d71b9677217229549b96222a77b935e6, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -131
+      value: -2
       objectReference: {fileID: 0}
     - target: {fileID: 2849694131520263594, guid: d71b9677217229549b96222a77b935e6, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -456
+      value: 157
       objectReference: {fileID: 0}
     - target: {fileID: 2849694131520263594, guid: d71b9677217229549b96222a77b935e6, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -3904,6 +3912,10 @@ PrefabInstance:
     - target: {fileID: 4061324143910392156, guid: d71b9677217229549b96222a77b935e6, type: 3}
       propertyPath: m_Name
       value: MeleeButton
+      objectReference: {fileID: 0}
+    - target: {fileID: 4061324143910392156, guid: d71b9677217229549b96222a77b935e6, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
