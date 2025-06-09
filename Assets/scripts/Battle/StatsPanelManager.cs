@@ -31,7 +31,7 @@ public class StatsPanelManager : MonoBehaviour
     public void DisplayEnemyStats(Enemy enemy)
     {
         nameText.text = enemy.EnemyName;
-        hpText.text = enemy.MaxHp.ToString();
+        hpText.text = enemy.Health.ToString();
         defText.text = enemy.Defense.ToString();
         spdText.text = enemy.Speed.ToString();
         strText.text = enemy.Strength.ToString();

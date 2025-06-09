@@ -52,6 +52,7 @@ public class HexTile : MonoBehaviour
     };
 
     public BattleManager battleManager;
+    public static bool attackMode = false;
 
     public void SetupHexTile(GameObject addPlayerPrefab, GameObject addEnemyPrefab, GameObject movePrefab, GameObject fightPrefab)
     {
@@ -155,6 +156,17 @@ public class HexTile : MonoBehaviour
 
     void OnHexClick()
     {
+        Debug.Log("Attack mode: " + attackMode);
+
+        if (attackMode)
+        {
+            if (BattleManager.Instance != null)
+            {
+                BattleManager.Instance.OnTileClicked(this);
+            }
+            return;
+        }
+
         if (isMoveMode)
         {
             if (highlightedTiles.Contains(this))
@@ -165,7 +177,6 @@ public class HexTile : MonoBehaviour
             {
                 CancelMove();
             }
-
             return;
         }
 
@@ -207,8 +218,9 @@ public class HexTile : MonoBehaviour
                 statsPanelManager.ClearStats();
             }
         }
-
+        attackMode = false;
     }
+
 
     static void HideActionButtonsFromAll()
     {
@@ -226,6 +238,8 @@ public class HexTile : MonoBehaviour
 
     void ShowActionButtons()
     {
+        if (attackMode) return;
+
         GetComponent<Image>().color = highlightColor;
 
         Vector2 position = GetComponent<RectTransform>().anchoredPosition;
@@ -247,9 +261,9 @@ public class HexTile : MonoBehaviour
         addEnemyButton.GetComponent<RectTransform>().anchoredPosition = position + new Vector2(offsetX, offsetY - 2 * (buttonSpacing + 40f));
         fightButton.GetComponent<RectTransform>().anchoredPosition = position + new Vector2(offsetX, offsetY - 3 * (buttonSpacing + 40f));
 
-
         buttonsVisible = true;
     }
+
 
     void ResetColor()
     {
@@ -341,22 +355,6 @@ public class HexTile : MonoBehaviour
         {
             tile.GetComponent<Image>().color = Color.cyan;
             highlightedTiles.Add(tile);
-
-            /*if (-range + currentHex.corX <= tile.corX && tile.corX <= range + currentHex.corX)
-            {
-                if ((Mathf.Max(-range + currentHex.corY, -tile.corX - range - currentHex.corX) <= tile.corY)&&(tile.corY <= Mathf.Min(range, -tile.corX + range - currentHex.corX)))
-                {
-                    tile.GetComponent<Image>().color = Color.cyan;
-                    highlightedTiles.Add(tile);
-                }
-
-            }*/
-            /*int distance = Mathf.Abs(tile.corX - currentHex.corX) + Mathf.Abs(tile.corY - currentHex.corY);
-            if (distance <= range && tile != this && !tile.IsOccupied())
-            {
-                tile.GetComponent<Image>().color = Color.cyan;
-                highlightedTiles.Add(tile);
-            }*/
         }
     }
 
@@ -636,9 +634,28 @@ public class HexTile : MonoBehaviour
     {
         if ((currentlySelectedHex.characterInstanceOnThisTile != null || currentlySelectedHex.enemyObject != null) && battleManager != null)
         {
-            Debug.Log(currentlySelectedHex);
             battleManager.InitiateBattle(currentlySelectedHex);
+            attackMode = true;
+            Debug.Log(attackMode);
             HideActionButtons();
         }
+    }
+
+    public void HighlightAsTarget(bool highlight)
+    {
+        Image img = GetComponent<Image>();
+        if (img != null)
+        {
+            img.color = highlight ? Color.red : Color.white;
+        }
+        else
+        {
+            Debug.LogWarning("HexTile is missing an Image component.");
+        }
+    }
+
+    public void SetAttackMode(bool value)
+    {
+        attackMode = value;
     }
 }
