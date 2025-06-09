@@ -5,6 +5,7 @@ using TMPro;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using UnityEngine.SceneManagement;
 
 public class HexTile : MonoBehaviour
 {
@@ -163,6 +164,7 @@ public class HexTile : MonoBehaviour
             if (BattleManager.Instance != null)
             {
                 BattleManager.Instance.OnTileClicked(this);
+                attackMode = false;
             }
             return;
         }
@@ -657,5 +659,12 @@ public class HexTile : MonoBehaviour
     public void SetAttackMode(bool value)
     {
         attackMode = value;
+    }
+
+
+
+    public void ToMenu()
+    {
+        SceneManager.LoadScene("Main");
     }
 }
