@@ -6,7 +6,6 @@ using System.IO;
 using UnityEngine.UI;
 using TMPro;
 using Unity.VisualScripting;
-using UnityEditor.MemoryProfiler;
 using System;
 using System.Linq;
 using UnityEngine.UIElements;
@@ -183,6 +182,8 @@ public class DatabaseManager : MonoBehaviour
                         BonusDamage = a.BonusDamage
                     })
                     .ToList();
+                //foreach(var actionAn in enemy.EnemyAction) Debug.Log("enemy action: " + actionAn.ActionName);
+
 
                 enemies.Add(enemy);
             }

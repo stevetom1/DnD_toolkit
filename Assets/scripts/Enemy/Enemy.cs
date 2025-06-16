@@ -90,11 +90,10 @@ public class Enemy : MonoBehaviour
     {
         Health = MaxHp;
 
-        weaknesesDropdown = GameObject.Find("Weakneses").GetComponent<DropdownManager>();
+        /*weaknesesDropdown = GameObject.Find("Weakneses").GetComponent<DropdownManager>();
         vulnerabilityDropdown = GameObject.Find("Vulnerability").GetComponent<DropdownManager>();
         immunityDropdown = GameObject.Find("Immunity").GetComponent<DropdownManager>();
-        immunityAgaintsStatusDropdown = GameObject.Find("ImmunityAgaintsStatus").GetComponent<DropdownStatus>();
-
+        immunityAgaintsStatusDropdown = GameObject.Find("ImmunityAgaintsStatus").GetComponent<DropdownStatus>();*/
     }
 
     public void SetEnemyActionList()
@@ -151,16 +150,25 @@ public class Enemy : MonoBehaviour
             enemy.Immunity = immunityDropdown.damageType;
             enemy.ImmunityAgaintsStatus = immunityAgaintsStatusDropdown.statusType;
 
-            enemy.EnemyAction = EnemyAction;
+            if (enemyActionList != null && enemyActionList.enemyActionList != null)
+            {
+                enemy.EnemyAction = enemyActionList.enemyActionList;
+                Debug.Log($"Enemy actions count: {enemy.EnemyAction.Count}");
+            }
+            else
+            {
+                Debug.LogWarning("Enemy actions list is null or empty.");
+            }
 
             databaseManager.SaveEnemy(enemy);
-            Debug.Log($"Enemy '{enemy.EnemyName}' saved successfully.");    
+            Debug.Log($"Enemy '{enemy.EnemyName}' saved successfully.");
         }
         catch (System.Exception ex)
         {
             Debug.LogError($"Failed to create enemy: {ex.Message}");
         }
     }
+
 
 
 }

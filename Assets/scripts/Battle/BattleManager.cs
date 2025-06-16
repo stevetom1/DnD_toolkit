@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using System.Collections;
 
 public class BattleManager : MonoBehaviour
 {
@@ -97,18 +98,88 @@ public class BattleManager : MonoBehaviour
         battlePanelInstance.SetActive(false);
         attackerTile.SetAttackMode(false);
 
-        if (targetTile.hasEnemy) 
-        { 
-            targetTile.enemyOnTile.Health--;
-            Debug.Log("enemy health: " + targetTile.enemyOnTile.Health);
+        int AC;
+        int attack;
+        if (targetTile.hasEnemy)
+        {
+            AC = targetTile.enemyOnTile.Defense;
         }
-
-
-        if (targetTile.characterInstanceOnThisTile)
+        else
         {
             var player = targetTile.characterInstanceOnThisTile.GetComponent<Player>();
-            player.hp--;
-            Debug.Log("player health: " + player.hp);
+            AC = player.defense;
+        }
+        if (attackerTile.hasEnemy)
+        {
+           if(Attack(AC, 6))
+           {
+                int k10 = Random.Range(1, 10);
+                if (targetTile.hasEnemy)
+                {
+                    targetTile.enemyOnTile.Health -= k10;
+                    if (targetTile.enemyOnTile.Health <= 0)
+                    {
+                        Transform oldVisual = targetTile.transform.Find("GameObject");
+                        if (oldVisual != null)
+                            oldVisual.gameObject.SetActive(false);
+                        targetTile.hasEnemy= false;
+                        Destroy(targetTile.enemyOnTile.gameObject);
+                    }
+
+                    Debug.Log("enemy health: " + targetTile.enemyOnTile.Health);
+                }
+                else
+                {
+                    var player = targetTile.characterInstanceOnThisTile.GetComponent<Player>();
+                    player.hp -= k10;
+                    if (player.hp <= 0) 
+                    {
+                        Transform oldVisual = targetTile.transform.Find("GameObject");
+                        if (oldVisual != null)
+                            oldVisual.gameObject.SetActive(false);
+                        Destroy(player.gameObject);
+                    };
+
+                    Debug.Log("player health: " + player.hp);
+                }
+           }
+        }
+        else
+        {
+            if (Attack(AC, 6))
+            {
+                int k10 = Random.Range(1, 10);
+                if (targetTile.hasEnemy)
+                {
+                    targetTile.enemyOnTile.Health -= k10;
+                    if (targetTile.enemyOnTile.Health <= 0)
+                    {
+                        Transform oldVisual = targetTile.transform.Find("GameObject");
+                        if (oldVisual != null)
+                            oldVisual.gameObject.SetActive(false);
+                        targetTile.hasEnemy = false;
+                        Destroy(targetTile.enemyOnTile.gameObject);
+                    }
+
+                    Debug.Log("enemy health: " + targetTile.enemyOnTile.Health);
+                }
+                else
+                {
+                    var player = targetTile.characterInstanceOnThisTile.GetComponent<Player>();
+                    player.hp -= k10;
+                    if (player.hp <= 0) 
+                    {
+                        Transform oldVisual = targetTile.transform.Find("GameObject");
+                        if (oldVisual != null)
+                            oldVisual.gameObject.SetActive(false);
+                        Destroy(player.gameObject);
+                    }
+
+
+
+                    Debug.Log("player health: " + player.hp);
+                }
+            }
         }
     }
 
@@ -154,5 +225,11 @@ public class BattleManager : MonoBehaviour
         int q = hex.x;
         int r = hex.y - (hex.x - (hex.x >> 1)) / 2;
         return new Vector3Int(q, r, -q - r);
+    }
+
+    private bool Attack(int AC, int attackNumber)
+    {
+        int k20 = Random.Range(1, 20);
+        return ((attackNumber + k20) >= AC);
     }
 }
