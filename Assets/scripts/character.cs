@@ -49,6 +49,8 @@ public class character : MonoBehaviour
     public Button resetButton;
     public Button nextButton;
 
+    public GameObject panel;
+
     private int[] stats = new int[6];
     private int[] bonusStats = new int[6];
     private List<int> availableStats;
@@ -121,6 +123,8 @@ public class character : MonoBehaviour
 
     void Start()
     {
+        panel.SetActive(false);
+
         rollStatsButton.onClick.AddListener(RollStats);
 
         strengthLeftArrow.onClick.AddListener(() => CycleStat(ref strengthText, 0, -1));
